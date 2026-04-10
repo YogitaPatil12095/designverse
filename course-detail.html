@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Course Detail – DesignVerse</title>
+  <link rel="stylesheet" href="css/main.css" />
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <style>
+    body { padding-top: 70px; }
+    .course-hero {
+      background: linear-gradient(135deg, #1a0a2e, #0a0a1f);
+      padding: 4rem 0; border-bottom: 1px solid var(--border);
+    }
+    .course-hero-layout { display: grid; grid-template-columns: 1fr 380px; gap: 3rem; align-items: start; }
+    .course-breadcrumb { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem; }
+    .course-breadcrumb a { color: var(--accent-secondary); }
+    .course-hero-title { font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 800; margin-bottom: 1rem; line-height: 1.2; }
+    .course-hero-desc { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7; margin-bottom: 1.5rem; }
+    .course-meta-row { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1.5rem; }
+    .course-rating-big { color: var(--accent-gold); font-weight: 700; font-size: 1rem; }
+    .course-instructor-row { display: flex; align-items: center; gap: 0.75rem; }
+    .instructor-avatar-sm {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--gradient-primary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; font-weight: 700;
+    }
+    /* Sticky card */
+    .course-card-sticky {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-xl); overflow: hidden;
+      position: sticky; top: 90px;
+      box-shadow: var(--shadow-lg);
+    }
+    .course-card-thumb {
+      height: 200px; background: linear-gradient(135deg, var(--bg-card), var(--bg-card-hover));
+      display: flex; align-items: center; justify-content: center; font-size: 5rem;
+    }
+    .course-card-body { padding: 1.5rem; }
+    .course-price-big { font-size: 2rem; font-weight: 800; color: var(--accent-secondary); }
+    .course-price-orig { font-size: 1rem; color: var(--text-muted); text-decoration: line-through; margin-left: 0.5rem; }
+    .course-discount { font-size: 0.85rem; color: #10b981; font-weight: 600; margin-left: 0.5rem; }
+    .btn-enroll {
+      width: 100%; padding: 1rem; margin-top: 1.25rem;
+      background: var(--gradient-primary); border: none;
+      border-radius: var(--radius-md); color: #fff;
+      font-size: 1rem; font-weight: 700; cursor: pointer;
+      transition: var(--transition); box-shadow: 0 0 20px rgba(124,58,237,0.3);
+    }
+    .btn-enroll:hover { transform: translateY(-2px); box-shadow: 0 0 35px rgba(124,58,237,0.5); }
+    .btn-wishlist {
+      width: 100%; padding: 0.75rem; margin-top: 0.75rem;
+      background: transparent; border: 1px solid var(--border);
+      border-radius: var(--radius-md); color: var(--text-primary);
+      font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: var(--transition);
+    }
+    .btn-wishlist:hover { border-color: var(--accent-pink); color: var(--accent-pink); }
+    .course-includes { margin-top: 1.25rem; }
+    .course-includes h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
+    .include-item { display: flex; align-items: center; gap: 0.6rem; font-size: 0.85rem; color: var(--text-secondary); padding: 0.3rem 0; }
+    /* Content tabs */
+    .content-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
+    .content-tab {
+      padding: 0.85rem 1.5rem; font-size: 0.9rem; font-weight: 600;
+      color: var(--text-muted); border: none; background: transparent;
+      cursor: pointer; border-bottom: 2px solid transparent;
+      transition: var(--transition); margin-bottom: -1px;
+    }
+    .content-tab.active { color: var(--accent-secondary); border-bottom-color: var(--accent-primary); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    /* Curriculum */
+    .curriculum-section { margin-bottom: 1rem; }
+    .curriculum-section-header {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 1rem 1.25rem;
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer; font-weight: 600;
+    }
+    .curriculum-section-header:hover { border-color: var(--border-light); }
+    .curriculum-lessons { border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius-md) var(--radius-md); overflow: hidden; }
+    .lesson-item {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.85rem 1.25rem; border-bottom: 1px solid var(--border);
+      font-size: 0.875rem; transition: var(--transition);
+    }
+    .lesson-item:last-child { border-bottom: none; }
+    .lesson-item:hover { background: rgba(124,58,237,0.05); }
+    .lesson-icon { font-size: 1rem; width: 20px; text-align: center; }
+    .lesson-title { flex: 1; color: var(--text-secondary); }
+    .lesson-duration { font-size: 0.78rem; color: var(--text-muted); }
+    .lesson-free { font-size: 0.72rem; color: #10b981; font-weight: 600; background: rgba(16,185,129,0.1); padding: 0.15rem 0.5rem; border-radius: 100px; }
+    /* Reviews */
+    .review-summary { display: flex; gap: 2rem; align-items: center; margin-bottom: 2rem; padding: 1.5rem; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border); }
+    .review-big-num { font-size: 4rem; font-weight: 900; color: var(--accent-gold); line-height: 1; }
+    .review-stars-big { color: var(--accent-gold); font-size: 1.25rem; margin-bottom: 0.25rem; }
+    .review-bars { flex: 1; }
+    .review-bar-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.4rem; font-size: 0.8rem; color: var(--text-muted); }
+    .review-bar-track { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .review-bar-fill { height: 100%; background: var(--accent-gold); border-radius: 3px; }
+    .review-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1rem; }
+    .review-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+    .review-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; }
+    .review-name { font-weight: 600; font-size: 0.9rem; }
+    .review-date { font-size: 0.75rem; color: var(--text-muted); }
+    .review-stars { color: var(--accent-gold); font-size: 0.85rem; }
+    .review-text { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6; }
+    @media (max-width: 1024px) { .course-hero-layout { grid-template-columns: 1fr; } .course-card-sticky { position: static; } }
+  </style>
+</head>
+<body>
+<header class="navbar" id="navbar"></header>
+<div class="mobile-menu" id="mobile-menu"></div>
+
+<div class="course-hero">
+  <div class="container">
+    <div class="course-hero-layout">
+      <div>
+        <div class="course-breadcrumb"><a href="courses.html">Courses</a> › <span id="hero-category">UI/UX</span></div>
+        <h1 class="course-hero-title" id="hero-title">Loading...</h1>
+        <p class="course-hero-desc" id="hero-desc"></p>
+        <div class="course-meta-row">
+          <span class="course-rating-big" id="hero-rating"></span>
+          <span id="hero-reviews"></span>
+          <span id="hero-students"></span>
+          <span id="hero-duration"></span>
+          <span class="badge" id="hero-level"></span>
+        </div>
+        <div class="course-instructor-row">
+          <div class="instructor-avatar-sm" id="hero-inst-avatar">PS</div>
+          <div>
+            <div style="font-size:0.82rem;color:var(--text-muted)">Created by</div>
+            <div style="font-size:0.9rem;font-weight:600;color:var(--accent-secondary)" id="hero-instructor"></div>
+          </div>
+        </div>
+      </div>
+      <div class="course-card-sticky">
+        <div class="course-card-thumb" id="card-thumb">🎨</div>
+        <div class="course-card-body">
+          <div>
+            <span class="course-price-big" id="card-price">₹999</span>
+            <span class="course-price-orig" id="card-orig">₹2,999</span>
+            <span class="course-discount" id="card-discount">67% off</span>
+          </div>
+          <button class="btn-enroll" id="btn-enroll" onclick="enrollCourse()">🚀 Enroll Now</button>
+          <button class="btn-wishlist" id="btn-wishlist" onclick="toggleWishlistCourse()">🤍 Add to Wishlist</button>
+          <div class="course-includes">
+            <h4>This course includes</h4>
+            <div class="include-item">🎬 <span id="inc-duration">24h</span> on-demand video</div>
+            <div class="include-item">📁 Downloadable resources</div>
+            <div class="include-item">📱 Access on mobile & desktop</div>
+            <div class="include-item">🏆 Certificate of completion</div>
+            <div class="include-item">🔄 Lifetime access</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container" style="padding-top:3rem;padding-bottom:3rem">
+  <div class="content-tabs">
+    <button class="content-tab active" onclick="switchTab('overview',this)">Overview</button>
+    <button class="content-tab" onclick="switchTab('curriculum',this)">Curriculum</button>
+    <button class="content-tab" onclick="switchTab('instructor',this)">Instructor</button>
+    <button class="content-tab" onclick="switchTab('reviews',this)">Reviews</button>
+  </div>
+
+  <!-- Overview -->
+  <div class="tab-panel active" id="tab-overview">
+    <h3 style="margin-bottom:1rem">What you'll learn</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:2rem" id="learn-grid"></div>
+    <h3 style="margin-bottom:1rem">Requirements</h3>
+    <ul style="color:var(--text-secondary);font-size:0.9rem;line-height:2;padding-left:1.25rem" id="req-list"></ul>
+    <h3 style="margin-top:2rem;margin-bottom:1rem">Description</h3>
+    <p style="color:var(--text-secondary);line-height:1.8;font-size:0.95rem" id="desc-long"></p>
+  </div>
+
+  <!-- Curriculum -->
+  <div class="tab-panel" id="tab-curriculum">
+    <p style="color:var(--text-muted);font-size:0.875rem;margin-bottom:1.5rem" id="curriculum-summary"></p>
+    <div id="curriculum-list"></div>
+  </div>
+
+  <!-- Instructor -->
+  <div class="tab-panel" id="tab-instructor">
+    <div style="display:flex;gap:1.5rem;align-items:flex-start;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2rem;margin-bottom:1.5rem">
+      <div style="width:80px;height:80px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:800;flex-shrink:0" id="inst-avatar-big">PS</div>
+      <div>
+        <h3 style="margin-bottom:0.25rem" id="inst-name-big"></h3>
+        <p style="color:var(--accent-secondary);font-size:0.9rem;margin-bottom:0.75rem" id="inst-role-big"></p>
+        <div style="display:flex;gap:1.5rem;font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem">
+          <span>⭐ 4.9 Instructor Rating</span>
+          <span>👥 50,000+ Students</span>
+          <span>📚 8 Courses</span>
+        </div>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7">A passionate design educator with 10+ years of industry experience. Has worked with top companies including Google, Adobe, and Flipkart. Specializes in making complex design concepts accessible to beginners and professionals alike.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reviews -->
+  <div class="tab-panel" id="tab-reviews">
+    <div class="review-summary">
+      <div style="text-align:center">
+        <div class="review-big-num" id="rev-score">4.9</div>
+        <div class="review-stars-big">★★★★★</div>
+        <div style="font-size:0.8rem;color:var(--text-muted)">Course Rating</div>
+      </div>
+      <div class="review-bars">
+        <div class="review-bar-row"><span>5★</span><div class="review-bar-track"><div class="review-bar-fill" style="width:78%"></div></div><span>78%</span></div>
+        <div class="review-bar-row"><span>4★</span><div class="review-bar-track"><div class="review-bar-fill" style="width:15%"></div></div><span>15%</span></div>
+        <div class="review-bar-row"><span>3★</span><div class="review-bar-track"><div class="review-bar-fill" style="width:5%"></div></div><span>5%</span></div>
+        <div class="review-bar-row"><span>2★</span><div class="review-bar-track"><div class="review-bar-fill" style="width:1%"></div></div><span>1%</span></div>
+        <div class="review-bar-row"><span>1★</span><div class="review-bar-track"><div class="review-bar-fill" style="width:1%"></div></div><span>1%</span></div>
+      </div>
+    </div>
+    <div id="reviews-list"></div>
+  </div>
+</div>
+
+<footer class="footer" id="footer"></footer>
+<script src="js/components.js"></script>
+<script src="js/main.js"></script>
+<script>
+  const id = parseInt(new URLSearchParams(window.location.search).get('id')) || 1;
+  const course = COURSES.find(c => c.id === id) || COURSES[0];
+
+  // Populate hero
+  document.title = course.title + ' – DesignVerse';
+  document.getElementById('hero-title').textContent = course.title;
+  document.getElementById('hero-category').textContent = course.tag;
+  document.getElementById('hero-desc').textContent = `Master ${course.title} with hands-on projects and real-world examples. This comprehensive course takes you from fundamentals to advanced techniques.`;
+  document.getElementById('hero-rating').textContent = '★ ' + course.rating;
+  document.getElementById('hero-reviews').textContent = `(${course.reviews.toLocaleString()} reviews)`;
+  document.getElementById('hero-students').textContent = `👥 ${course.students} students`;
+  document.getElementById('hero-duration').textContent = `⏱ ${course.duration}`;
+  document.getElementById('hero-level').textContent = course.level;
+  document.getElementById('hero-level').className = `badge badge-${course.level==='Beginner'?'success':course.level==='Intermediate'?'warning':'info'}`;
+  document.getElementById('hero-instructor').textContent = course.instructor;
+  document.getElementById('hero-inst-avatar').textContent = course.instructor.split(' ').map(n=>n[0]).join('');
+  document.getElementById('card-thumb').textContent = course.emoji;
+  document.getElementById('card-price').textContent = '₹' + course.price.toLocaleString();
+  document.getElementById('card-orig').textContent = '₹' + course.original.toLocaleString();
+  document.getElementById('card-discount').textContent = Math.round((1 - course.price/course.original)*100) + '% off';
+  document.getElementById('inc-duration').textContent = course.duration;
+  document.getElementById('inst-name-big').textContent = course.instructor;
+  document.getElementById('inst-role-big').textContent = course.tag + ' Instructor';
+  document.getElementById('inst-avatar-big').textContent = course.instructor.split(' ').map(n=>n[0]).join('');
+
+  // What you'll learn
+  const LEARN = ['Understand core design principles','Build real-world projects','Use industry-standard tools','Create stunning visual designs','Develop a professional portfolio','Apply design thinking process','Master typography & color theory','Collaborate in design teams'];
+  document.getElementById('learn-grid').innerHTML = LEARN.map(l => `<div style="display:flex;gap:0.5rem;font-size:0.875rem;color:var(--text-secondary)"><span style="color:#10b981;flex-shrink:0">✓</span>${l}</div>`).join('');
+
+  // Requirements
+  const REQS = ['No prior design experience needed','A computer with internet access','Willingness to learn and practice','Figma (free version) for UI/UX courses'];
+  document.getElementById('req-list').innerHTML = REQS.map(r => `<li>${r}</li>`).join('');
+  document.getElementById('desc-long').textContent = `This comprehensive ${course.title} course is designed for anyone who wants to master design from the ground up. Whether you're a complete beginner or looking to sharpen your skills, this course covers everything you need. You'll work on real projects, get instructor feedback, and graduate with a portfolio-ready skillset. Our project-based approach ensures you're not just watching videos — you're building, creating, and growing as a designer.`;
+
+  // Curriculum
+  const SECTIONS = [
+    { title: 'Getting Started', lessons: [{ icon:'▶', title:'Welcome & Course Overview', dur:'5:00', free:true },{ icon:'▶', title:'Setting Up Your Tools', dur:'12:00', free:true },{ icon:'📄', title:'Design Principles PDF', dur:'—', free:false }] },
+    { title: 'Core Fundamentals', lessons: [{ icon:'▶', title:'Color Theory Basics', dur:'18:00', free:false },{ icon:'▶', title:'Typography Essentials', dur:'22:00', free:false },{ icon:'▶', title:'Layout & Spacing', dur:'25:00', free:false },{ icon:'📝', title:'Quiz: Fundamentals', dur:'10:00', free:false }] },
+    { title: 'Intermediate Techniques', lessons: [{ icon:'▶', title:'Component Design', dur:'30:00', free:false },{ icon:'▶', title:'Responsive Design', dur:'28:00', free:false },{ icon:'🎯', title:'Project: Landing Page', dur:'45:00', free:false }] },
+    { title: 'Advanced & Portfolio', lessons: [{ icon:'▶', title:'Design Systems', dur:'35:00', free:false },{ icon:'▶', title:'Presentation & Handoff', dur:'20:00', free:false },{ icon:'🏆', title:'Final Project & Certificate', dur:'60:00', free:false }] },
+  ];
+  document.getElementById('curriculum-summary').textContent = `${SECTIONS.length} sections • ${SECTIONS.reduce((a,s)=>a+s.lessons.length,0)} lessons • ${course.duration} total`;
+  document.getElementById('curriculum-list').innerHTML = SECTIONS.map((s,i) => `
+    <div class="curriculum-section">
+      <div class="curriculum-section-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+        <span>📂 ${s.title}</span>
+        <span style="font-size:0.8rem;color:var(--text-muted)">${s.lessons.length} lessons</span>
+      </div>
+      <div class="curriculum-lessons" ${i>0?'style="display:none"':''}>
+        ${s.lessons.map(l=>`<div class="lesson-item"><span class="lesson-icon">${l.icon}</span><span class="lesson-title">${l.title}</span>${l.free?'<span class="lesson-free">Free Preview</span>':''}<span class="lesson-duration">${l.dur}</span></div>`).join('')}
+      </div>
+    </div>`).join('');
+
+  // Reviews
+  const REVIEWS = [
+    { name:'Riya Kapoor', init:'RK', stars:5, date:'2 weeks ago', text:'Absolutely fantastic course! The instructor explains everything so clearly. I went from zero to building my first UI project in just 2 weeks.' },
+    { name:'Aditya Sharma', init:'AS', stars:5, date:'1 month ago', text:'Best design course I\'ve taken. The project-based approach really helps solidify the concepts. Highly recommend!' },
+    { name:'Meera Joshi', init:'MJ', stars:4, date:'1 month ago', text:'Great content and well-structured. Would love more advanced projects but overall a solid course for beginners.' },
+    { name:'Karan Patel', init:'KP', stars:5, date:'2 months ago', text:'The certificate helped me land a freelance client. Worth every rupee. The instructor is very responsive in the Q&A.' },
+  ];
+  document.getElementById('reviews-list').innerHTML = REVIEWS.map(r => `
+    <div class="review-card">
+      <div class="review-header">
+        <div class="review-avatar">${r.init}</div>
+        <div><div class="review-name">${r.name}</div><div class="review-date">${r.date}</div></div>
+        <div class="review-stars" style="margin-left:auto">${'★'.repeat(r.stars)}</div>
+      </div>
+      <p class="review-text">${r.text}</p>
+    </div>`).join('');
+
+  function switchTab(tab, btn) {
+    document.querySelectorAll('.content-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + tab).classList.add('active');
+  }
+
+  function enrollCourse() {
+    if (!Auth.isLoggedIn()) { window.location.href = 'auth.html'; return; }
+    if (Enrolled.get().find(c => c.id === course.id)) { showToast('Already enrolled!', 'info'); return; }
+    if (Subscription.isPro() || course.price === 0) {
+      Enrolled.add(course);
+      document.getElementById('btn-enroll').textContent = '✅ Enrolled!';
+      document.getElementById('btn-enroll').style.background = 'rgba(16,185,129,0.2)';
+      showToast('Successfully enrolled in ' + course.title + '!', 'success');
+      setTimeout(() => window.location.href = 'dashboard.html', 1500);
+    } else {
+      // Pay for course
+      initiatePayment({
+        amount: course.price * 100,
+        description: 'Purchase: ' + course.title
+      }, function(response) {
+        Enrolled.add(course);
+        document.getElementById('btn-enroll').textContent = '✅ Enrolled!';
+        document.getElementById('btn-enroll').style.background = 'rgba(16,185,129,0.2)';
+        showToast('Successfully enrolled in ' + course.title + '!', 'success');
+        setTimeout(() => window.location.href = 'dashboard.html', 1500);
+      });
+    }
+  }
+
+  function toggleWishlistCourse() {
+    Wishlist.toggle(course.id, document.getElementById('btn-wishlist'));
+  }
+
+  // Check if already enrolled
+  if (Enrolled.get().find(c => c.id === course.id)) {
+    document.getElementById('btn-enroll').textContent = '✅ Already Enrolled';
+    document.getElementById('btn-enroll').style.background = 'rgba(16,185,129,0.2)';
+  } else if (Subscription.isPro()) {
+    document.getElementById('btn-enroll').textContent = '🚀 Enroll (Pro Access)';
+  }
+  if (Wishlist.get().includes(course.id)) {
+    document.getElementById('btn-wishlist').textContent = '❤️ Wishlisted';
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DesignVerse – Learn Design Like a Pro</title>
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/home.css" />
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div id="loading-screen">
+  <div class="loader-logo">DesignVerse</div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+</div>
+
+<!-- Navbar -->
+<header class="navbar" id="navbar"></header>
+<div class="mobile-menu" id="mobile-menu"></div>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="container hero-content">
+    <div class="hero-text animate-fadeInUp">
+      <div class="hero-tag">🎨 #1 Design Education Platform</div>
+      <h1 class="hero-title">Learn Design<br><span class="gradient-text">Like a Pro</span></h1>
+      <p class="hero-subtitle">Master UI/UX, Graphic Design, Design Patterns & Art Styles with India's top design educators. Join 50,000+ designers already learning.</p>
+      <div class="hero-actions">
+        <a href="courses.html" class="btn btn-primary btn-lg">🚀 Explore Courses</a>
+        <a href="auth.html" class="btn btn-outline btn-lg">▶ Start Learning Free</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num">50K+</span><span class="stat-label">Students</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num">200+</span><span class="stat-label">Courses</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num">4.9★</span><span class="stat-label">Rating</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num">30+</span><span class="stat-label">Instructors</span></div>
+      </div>
+    </div>
+    <div class="hero-visual animate-float delay-2">
+      <div class="hero-card-mockup">
+        <div class="mockup-header">
+          <div class="mockup-dots"><span></span><span></span><span></span></div>
+          <span style="font-size:0.75rem;color:var(--text-muted)">designverse.app</span>
+        </div>
+        <div class="mockup-body">
+          <div class="mockup-course-card">
+            <div class="mockup-thumb">🎨</div>
+            <div>
+              <div class="mockup-title">UI/UX Fundamentals</div>
+              <div class="mockup-sub">Priya Sharma • 24h</div>
+              <div class="progress-bar" style="margin-top:0.5rem">
+                <div class="progress-fill" style="width:68%"></div>
+              </div>
+              <div style="font-size:0.7rem;color:var(--accent-secondary);margin-top:0.25rem">68% Complete</div>
+            </div>
+          </div>
+          <div class="mockup-badges">
+            <span class="badge badge-success">✓ Enrolled</span>
+            <span class="badge badge-purple">🏆 Certificate</span>
+          </div>
+          <div class="mockup-stats-row">
+            <div class="mockup-stat">📚<br><b>12</b><br><small>Modules</small></div>
+            <div class="mockup-stat">⏱<br><b>24h</b><br><small>Content</small></div>
+            <div class="mockup-stat">🎯<br><b>4.9</b><br><small>Rating</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Categories -->
+<section class="section" id="categories">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <div class="section-tag">Browse by Category</div>
+      <h2 class="section-title">Explore <span>Design Disciplines</span></h2>
+      <p class="section-subtitle">From foundational principles to advanced techniques — find your path.</p>
+    </div>
+    <div class="categories-grid">
+      <a href="courses.html?cat=uiux" class="category-card animate-on-scroll">
+        <div class="cat-icon" style="background:rgba(124,58,237,0.15)">🖥️</div>
+        <h3>UI/UX Design</h3>
+        <p>Wireframing, prototyping, user research & Figma</p>
+        <span class="cat-count">48 Courses</span>
+      </a>
+      <a href="courses.html?cat=graphic" class="category-card animate-on-scroll delay-1">
+        <div class="cat-icon" style="background:rgba(236,72,153,0.15)">🖼️</div>
+        <h3>Graphic Design</h3>
+        <p>Branding, typography, illustration & print</p>
+        <span class="cat-count">62 Courses</span>
+      </a>
+      <a href="courses.html?cat=pattern" class="category-card animate-on-scroll delay-2">
+        <div class="cat-icon" style="background:rgba(6,182,212,0.15)">🔷</div>
+        <h3>Design Patterns</h3>
+        <p>Design systems, component libraries & tokens</p>
+        <span class="cat-count">35 Courses</span>
+      </a>
+      <a href="courses.html?cat=art" class="category-card animate-on-scroll delay-3">
+        <div class="cat-icon" style="background:rgba(245,158,11,0.15)">🎭</div>
+        <h3>Art Styles</h3>
+        <p>Minimalism, Brutalism, Bauhaus & more</p>
+        <span class="cat-count">29 Courses</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Courses -->
+<section class="section" style="background:var(--bg-secondary)">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <div class="section-tag">Top Picks</div>
+      <h2 class="section-title">Featured <span>Courses</span></h2>
+      <p class="section-subtitle">Handpicked by our experts — start with the best.</p>
+    </div>
+    <div class="grid-4" id="featured-courses"></div>
+    <div style="text-align:center;margin-top:2.5rem">
+      <a href="courses.html" class="btn btn-outline">View All Courses →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Top Artists -->
+<section class="section">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <div class="section-tag">Meet the Experts</div>
+      <h2 class="section-title">Top <span>Artists & Instructors</span></h2>
+    </div>
+    <div class="artists-row" id="artists-row"></div>
+  </div>
+</section>
+
+<!-- Why DesignVerse -->
+<section class="section" style="background:var(--bg-secondary)">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <div class="section-tag">Why Us</div>
+      <h2 class="section-title">Why Choose <span>DesignVerse?</span></h2>
+    </div>
+    <div class="grid-3" id="why-grid"></div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <div class="section-tag">Student Love</div>
+      <h2 class="section-title">What Our <span>Students Say</span></h2>
+    </div>
+    <div class="testimonials-grid" id="testimonials"></div>
+  </div>
+</section>
+
+<!-- CTA Banner -->
+<section class="cta-banner">
+  <div class="cta-orb"></div>
+  <div class="container cta-content animate-on-scroll">
+    <h2>Ready to Start Your Design Journey?</h2>
+    <p>Join 50,000+ designers. Get access to 200+ courses, live workshops, and a certificate upon completion.</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2rem">
+      <a href="auth.html" class="btn btn-primary btn-lg">Get Started Free</a>
+      <a href="revenue.html" class="btn btn-outline btn-lg">View Pricing</a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer" id="footer"></footer>
+
+<script src="js/components.js"></script>
+<script src="js/main.js"></script>
+<script src="js/home.js"></script>
+</body>
+</html>

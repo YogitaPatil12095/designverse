@@ -1,0 +1,188 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Privacy & Terms - DesignVerse</title>
+  <link rel="stylesheet" href="css/main.css"/>
+  <style>
+    body{padding-top:70px}
+    .sec-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:2.5rem}
+    .sec-tab{padding:.85rem 2rem;font-size:.95rem;font-weight:600;color:var(--text-muted);border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;transition:var(--transition);margin-bottom:-1px}
+    .sec-tab.active{color:var(--accent-secondary);border-bottom-color:var(--accent-primary)}
+    .tab-panel{display:none}.tab-panel.active{display:block}
+    .policy-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);padding:2rem;margin-bottom:1.5rem}
+    .policy-card h3{font-size:1.05rem;font-weight:700;color:var(--accent-secondary);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+    .policy-card p,.policy-card li{font-size:.9rem;color:var(--text-secondary);line-height:1.9}
+    .policy-card ul{padding-left:1.25rem}
+    .policy-card ul li{margin-bottom:.35rem}
+    .rights-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1rem}
+    .right-item{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-md);padding:1rem;text-align:center}
+    .right-item .icon{font-size:1.5rem;margin-bottom:.5rem}
+    .right-item p{font-size:.78rem;color:var(--text-secondary);margin-top:.25rem}
+    .right-item strong{font-size:.82rem;color:var(--text-primary)}
+    .last-updated{font-size:.78rem;color:var(--text-muted);margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border)}
+    @media(max-width:640px){.rights-grid{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+<header class="navbar" id="navbar"></header>
+<div class="mobile-menu" id="mobile-menu"></div>
+
+<div class="page-hero">
+  <div class="container">
+    <h1>Privacy &amp; <span style="background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Terms</span></h1>
+    <p>How we handle your data and the rules that govern your use of DesignVerse.</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="container" style="max-width:860px">
+    <div class="sec-tabs">
+      <button class="sec-tab active" onclick="switchTab('privacy',this)">&#128274; Privacy Policy</button>
+      <button class="sec-tab" onclick="switchTab('terms',this)">&#128203; Terms of Service</button>
+    </div>
+
+    <!-- PRIVACY POLICY -->
+    <div class="tab-panel active" id="tab-privacy">
+      <div class="policy-card">
+        <h3>&#128274; What Data We Collect</h3>
+        <ul>
+          <li><strong>Account Data:</strong> Name and email address provided at registration.</li>
+          <li><strong>Learning Data:</strong> Course progress, quiz scores, certificates earned, and bookmarks.</li>
+          <li><strong>Payment Data:</strong> Transaction IDs only — card details are handled by our PCI-DSS certified payment gateway and never stored by us.</li>
+          <li><strong>Usage Data:</strong> Pages visited, time spent, and device type — used anonymously to improve the platform.</li>
+          <li><strong>Communications:</strong> Support tickets and feedback you submit to us.</li>
+        </ul>
+      </div>
+
+      <div class="policy-card">
+        <h3>&#128101; How We Use Your Data</h3>
+        <ul>
+          <li>Deliver and personalise your learning experience</li>
+          <li>Issue certificates and track your course progress</li>
+          <li>Process payments and send receipts</li>
+          <li>Send course updates and newsletters (you can opt out anytime)</li>
+          <li>Improve platform features based on anonymised usage patterns</li>
+          <li>Prevent fraud and ensure platform security</li>
+        </ul>
+      </div>
+
+      <div class="policy-card">
+        <h3>&#128257; Data Sharing</h3>
+        <p>We <strong>never sell</strong> your personal data. We share data only with:</p>
+        <ul style="margin-top:.75rem">
+          <li><strong>Payment processors</strong> (Razorpay) — for transaction processing only</li>
+          <li><strong>Email providers</strong> (SendGrid) — for transactional emails only</li>
+          <li><strong>Analytics tools</strong> — anonymised, aggregated data only</li>
+          <li><strong>Legal authorities</strong> — only when required by applicable law</li>
+        </ul>
+      </div>
+
+      <div class="policy-card">
+        <h3>&#128100; Your Rights</h3>
+        <div class="rights-grid">
+          <div class="right-item"><div class="icon">&#128065;</div><strong>Access</strong><p>View all your personal data from Settings</p></div>
+          <div class="right-item"><div class="icon">&#9999;</div><strong>Correct</strong><p>Update inaccurate information anytime</p></div>
+          <div class="right-item"><div class="icon">&#128465;</div><strong>Delete</strong><p>Request full account and data deletion</p></div>
+          <div class="right-item"><div class="icon">&#11015;</div><strong>Export</strong><p>Download your data in JSON/CSV format</p></div>
+          <div class="right-item"><div class="icon">&#128683;</div><strong>Opt Out</strong><p>Unsubscribe from marketing emails anytime</p></div>
+          <div class="right-item"><div class="icon">&#128274;</div><strong>Restrict</strong><p>Limit how we process your data</p></div>
+        </div>
+        <div style="display:flex;gap:.75rem;margin-top:1.25rem;flex-wrap:wrap">
+          <button class="btn btn-outline btn-sm" onclick="showToast('Data export request submitted!','success')">&#11015; Export My Data</button>
+          <button class="btn btn-sm" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#ef4444" onclick="showToast('Account deletion request submitted. Check your email.','info')">&#128465; Delete My Account</button>
+        </div>
+      </div>
+
+      <div class="policy-card">
+        <h3>&#128197; Data Retention</h3>
+        <ul>
+          <li>Active account data: Retained while your account is active</li>
+          <li>Deleted account data: Purged within 30 days of deletion request</li>
+          <li>Payment records: Retained for 7 years (legal requirement)</li>
+          <li>Analytics data: Anonymised after 12 months</li>
+        </ul>
+        <div class="last-updated">Last updated: January 2025 &middot; Effective: February 1, 2025</div>
+      </div>
+    </div>
+
+    <!-- TERMS OF SERVICE -->
+    <div class="tab-panel" id="tab-terms">
+      <div class="policy-card">
+        <h3>&#128203; Acceptance of Terms</h3>
+        <p>By accessing or using DesignVerse, you agree to be bound by these Terms of Service. If you do not agree, please do not use the platform. These terms apply to all users including learners, instructors, and visitors.</p>
+      </div>
+
+      <div class="policy-card">
+        <h3>&#127891; User Accounts</h3>
+        <ul>
+          <li>You must be at least 13 years old to create an account</li>
+          <li>You are responsible for maintaining the confidentiality of your password</li>
+          <li>One person may not maintain more than one free account</li>
+          <li>You must provide accurate and complete registration information</li>
+          <li>DesignVerse reserves the right to suspend accounts that violate these terms</li>
+        </ul>
+      </div>
+
+      <div class="policy-card">
+        <h3>&#128218; Course Content &amp; Intellectual Property</h3>
+        <ul>
+          <li>All course content is owned by DesignVerse or its instructors</li>
+          <li>You may not reproduce, distribute, or resell course content</li>
+          <li>Personal use and note-taking is permitted</li>
+          <li>Certificates are issued to the registered learner only and are non-transferable</li>
+          <li>Instructors retain ownership of their original content</li>
+        </ul>
+      </div>
+
+      <div class="policy-card">
+        <h3>&#128176; Payments &amp; Refunds</h3>
+        <ul>
+          <li>All prices are in Indian Rupees (INR) inclusive of applicable taxes</li>
+          <li>Subscriptions auto-renew unless cancelled before the renewal date</li>
+          <li><strong>Refund Policy:</strong> Full refund within 7 days of purchase if less than 20% of the course is completed</li>
+          <li>No refunds for downloaded resources or completed certificates</li>
+          <li>Disputed charges must be raised within 30 days</li>
+        </ul>
+      </div>
+
+      <div class="policy-card">
+        <h3>&#128683; Prohibited Conduct</h3>
+        <ul>
+          <li>Sharing account credentials with others</li>
+          <li>Scraping, crawling, or automated access to the platform</li>
+          <li>Uploading malicious code or attempting to breach security</li>
+          <li>Harassment, hate speech, or abusive behaviour in community forums</li>
+          <li>Misrepresenting your identity or credentials</li>
+          <li>Using the platform for commercial purposes without written consent</li>
+        </ul>
+      </div>
+
+      <div class="policy-card">
+        <h3>&#9878; Governing Law</h3>
+        <p>These Terms are governed by the laws of India. Any disputes shall be subject to the exclusive jurisdiction of courts in Bengaluru, Karnataka. For disputes under &#8377;1,00,000 we offer free online arbitration through our dispute resolution portal.</p>
+        <div class="last-updated">Last updated: January 2025 &middot; Version 3.2</div>
+      </div>
+
+      <div style="text-align:center;margin-top:2rem">
+        <p style="color:var(--text-muted);font-size:.875rem;margin-bottom:1rem">Questions about our policies?</p>
+        <a href="contact.html" class="btn btn-primary">Contact Us</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer" id="footer"></footer>
+<script src="js/components.js"></script>
+<script src="js/main.js"></script>
+<script>
+  function switchTab(tab, btn) {
+    document.querySelectorAll('.sec-tab').forEach(function(t){t.classList.remove('active');});
+    document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});
+    btn.classList.add('active');
+    document.getElementById('tab-'+tab).classList.add('active');
+  }
+</script>
+</body>
+</html>

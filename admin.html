@@ -1,0 +1,764 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Admin Panel - DesignVerse</title>
+  <link rel="stylesheet" href="css/main.css"/>
+  <style>
+    body{padding-top:70px}
+    .admin-topbar{position:fixed;top:0;left:0;right:0;height:70px;background:rgba(10,10,15,.97);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;z-index:1000}
+    .admin-topbar-logo{font-size:1.25rem;font-weight:800;background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .admin-topbar-right{display:flex;align-items:center;gap:1rem}
+    .admin-role-badge{background:rgba(239,68,68,.12);color:#ef4444;border:1px solid rgba(239,68,68,.25);padding:.3rem .85rem;border-radius:100px;font-size:.75rem;font-weight:700}
+    .admin-logout-btn{padding:.45rem 1rem;background:transparent;border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-secondary);font-size:.82rem;cursor:pointer;transition:var(--transition)}
+    .admin-logout-btn:hover{border-color:#ef4444;color:#ef4444}
+    .admin-layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 70px)}
+    .admin-sidebar{background:#0d0d18;border-right:1px solid var(--border);padding:1.25rem .75rem;position:sticky;top:70px;height:calc(100vh - 70px);overflow-y:auto}
+    .admin-logo{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);padding:.4rem .75rem;margin-bottom:.25rem;margin-top:.75rem}
+    .admin-logo:first-child{margin-top:0}
+    .admin-nav a{display:flex;align-items:center;gap:.6rem;padding:.6rem .75rem;border-radius:var(--radius-sm);font-size:.82rem;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:var(--transition);margin-bottom:.1rem;text-decoration:none}
+    .admin-nav a:hover,.admin-nav a.active{background:rgba(124,58,237,.15);color:var(--text-primary)}
+    .nav-sep{height:1px;background:var(--border);margin:.5rem 0}
+    .admin-main{padding:2rem;overflow-y:auto}
+    .admin-section{display:none}.admin-section.active{display:block}
+    .admin-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.75rem;flex-wrap:wrap;gap:1rem}
+    .admin-title{font-size:1.4rem;font-weight:800}
+    .admin-badge{background:rgba(239,68,68,.12);color:#ef4444;border:1px solid rgba(239,68,68,.25);padding:.2rem .65rem;border-radius:100px;font-size:.72rem;font-weight:700}
+    .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.75rem}
+    .kpi{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem}
+    .kpi-val{font-size:1.6rem;font-weight:800;color:var(--accent-secondary)}
+    .kpi-label{font-size:.75rem;color:var(--text-muted);margin-top:.2rem}
+    .kpi-change{font-size:.7rem;color:#10b981;margin-top:.2rem}
+    .tw{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;margin-bottom:1.5rem}
+    .tw-header{padding:.9rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+    .tw-title{font-weight:700;font-size:.9rem}
+    .tw-search{padding:.4rem .85rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-size:.8rem;width:190px}
+    .tw-search:focus{outline:none;border-color:var(--accent-primary)}
+    .at{width:100%;border-collapse:collapse}
+    .at th{padding:.7rem 1rem;text-align:left;font-size:.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);background:var(--bg-secondary)}
+    .at td{padding:.8rem 1rem;font-size:.8rem;color:var(--text-secondary);border-bottom:1px solid var(--border)}
+    .at tr:last-child td{border-bottom:none}
+    .at tr:hover td{background:rgba(124,58,237,.04)}
+    .sb{padding:.18rem .55rem;border-radius:100px;font-size:.67rem;font-weight:700}
+    .sb-ok{background:rgba(16,185,129,.15);color:#10b981}
+    .sb-warn{background:rgba(245,158,11,.15);color:var(--accent-gold)}
+    .sb-err{background:rgba(239,68,68,.15);color:#ef4444}
+    .sb-pro{background:rgba(124,58,237,.15);color:var(--accent-secondary)}
+    .sb-cyan{background:rgba(6,182,212,.15);color:var(--accent-cyan)}
+    .sb-muted{background:rgba(100,116,139,.15);color:var(--text-muted)}
+    .uav{width:28px;height:28px;border-radius:50%;background:var(--gradient-primary);display:inline-flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;margin-right:.4rem;vertical-align:middle}
+    .inflow{color:#10b981;font-weight:600}
+    .outflow{color:#ef4444;font-weight:600}
+    .net{color:#10b981;font-weight:800}
+    .prog-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;width:100px;display:inline-block;vertical-align:middle;margin-left:.5rem}
+    .prog-fill{height:100%;background:var(--gradient-primary);border-radius:3px}
+    .fj-wrap{position:relative;padding:.5rem 0}
+    .fj-line{position:absolute;left:22px;top:0;bottom:0;width:2px;background:var(--border)}
+    .fj-item{display:flex;gap:.9rem;margin-bottom:1rem;position:relative}
+    .fj-dot{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;z-index:1;border:2px solid var(--accent-primary);background:rgba(124,58,237,.12)}
+    .fj-dot.done{border-color:#10b981;background:rgba(16,185,129,.12)}
+    .fj-body{flex:1;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:.75rem 1rem}
+    .fj-title{font-weight:700;font-size:.85rem;margin-bottom:.15rem}
+    .fj-date{font-size:.7rem;color:var(--text-muted);margin-bottom:.3rem}
+    .fj-desc{font-size:.8rem;color:var(--text-secondary);line-height:1.5}
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:2000;align-items:center;justify-content:center}
+    .modal-overlay.open{display:flex}
+    .modal{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-xl);padding:1.75rem;max-width:560px;width:90%;max-height:80vh;overflow-y:auto}
+    .modal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+    .modal-close{background:transparent;border:none;color:var(--text-muted);font-size:1.4rem;cursor:pointer;line-height:1}
+    @media(max-width:1024px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:768px){.admin-layout{grid-template-columns:1fr}.admin-sidebar{display:none}.admin-main{padding:1.25rem}}
+  </style>
+</head>
+<body>
+
+<!-- Admin-only topbar — no public navbar -->
+<div class="admin-topbar">
+  <div class="admin-topbar-logo">DesignVerse Admin</div>
+  <div class="admin-topbar-right">
+    <span class="admin-role-badge">&#128272; Admin Panel</span>
+    <span id="admin-name-badge" style="font-size:.82rem;color:var(--text-secondary)"></span>
+    <button class="admin-logout-btn" onclick="Auth.logout()">&#128682; Logout</button>
+  </div>
+</div>
+
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="admin-logo">Overview</div>
+    <nav class="admin-nav">
+      <a class="active" onclick="showSec('overview',this)">&#128202; Dashboard</a>
+      <a onclick="showSec('enrollments',this)">&#127891; Course Enrollments</a>
+      <a onclick="showSec('users',this)">&#128101; All Students</a>
+      <div class="nav-sep"></div>
+      <div class="admin-logo">CRM</div>
+      <a onclick="showSec('complaints',this)">&#128226; Complaints</a>
+      <a onclick="showSec('feedback',this)">&#128172; Feedback Journeys</a>
+      <a onclick="showSec('referrals',this)">&#127381; Referral History</a>
+      <a onclick="showSec('reviews',this)">&#11088; Reviews</a>
+      <div class="nav-sep"></div>
+      <div class="admin-logo">Revenue</div>
+      <a onclick="showSec('revenue',this)">&#128176; Revenue Streams</a>
+      <a onclick="showSec('cashflow',this)">&#128200; Cash Flow</a>
+      <a onclick="showSec('partners',this)">&#129309; Partnerships</a>
+      <div class="nav-sep"></div>
+      <div class="admin-logo">Strategy</div>
+      <a onclick="showSec('marketing',this)">&#128227; Marketing</a>
+      <a onclick="showSec('security',this)">&#128274; Security</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <!-- OVERVIEW -->
+    <div class="admin-section active" id="sec-overview">
+      <div class="admin-header"><div class="admin-title">&#128202; Admin Dashboard</div><span class="admin-badge">&#128272; Admin Only</span></div>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-val">50,241</div><div class="kpi-label">Total Students</div><div class="kpi-change">&#8593; 1,240 this month</div></div>
+        <div class="kpi"><div class="kpi-val">8,432</div><div class="kpi-label">Pro Subscribers</div><div class="kpi-change">&#8593; 340 this month</div></div>
+        <div class="kpi"><div class="kpi-val">1,24,800</div><div class="kpi-label">Total Enrollments</div><div class="kpi-change">&#8593; 3,200 this month</div></div>
+        <div class="kpi"><div class="kpi-val">85%</div><div class="kpi-label">Avg Completion Rate</div><div class="kpi-change">&#8593; from 61% last year</div></div>
+        <div class="kpi"><div class="kpi-val">4.8&#9733;</div><div class="kpi-label">Avg Course Rating</div><div class="kpi-change">&#8593; 0.2 this quarter</div></div>
+        <div class="kpi"><div class="kpi-val">1,240</div><div class="kpi-label">Feedback Submitted</div><div class="kpi-change">18 features shipped</div></div>
+        <div class="kpi"><div class="kpi-val">98.2%</div><div class="kpi-label">Complaint Resolution</div><div class="kpi-change">Avg 18h</div></div>
+        <div class="kpi"><div class="kpi-val">&#8377;84.3L</div><div class="kpi-label">Monthly Revenue</div><div class="kpi-change">&#8593; 12% MoM</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem">
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);padding:1.5rem">
+          <h3 style="font-size:.9rem;font-weight:700;margin-bottom:1rem">&#127891; Top Enrolled Courses</h3>
+          <div id="top-courses-list"></div>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);padding:1.5rem">
+          <h3 style="font-size:.9rem;font-weight:700;margin-bottom:1rem">&#128172; Recent Student Feedback</h3>
+          <div id="recent-feedback-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COURSE ENROLLMENTS -->
+    <div class="admin-section" id="sec-enrollments">
+      <div class="admin-header"><div class="admin-title">&#127891; Course Enrollments</div><span class="admin-badge">&#128272; Admin Only</span></div>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-val">1,24,800</div><div class="kpi-label">Total Enrollments</div></div>
+        <div class="kpi"><div class="kpi-val">85%</div><div class="kpi-label">Avg Completion</div></div>
+        <div class="kpi"><div class="kpi-val">22,100</div><div class="kpi-label">Certificates Issued</div></div>
+        <div class="kpi"><div class="kpi-val">4.8&#9733;</div><div class="kpi-label">Avg Rating</div></div>
+      </div>
+      <div class="tw" style="margin-bottom:1.5rem">
+        <div class="tw-header"><span class="tw-title">Enrollment by Course</span></div>
+        <table class="at"><thead><tr><th>Course</th><th>Instructor</th><th>Enrolled</th><th>Completion</th><th>Avg Rating</th><th>Certificates</th><th>Revenue</th></tr></thead>
+        <tbody id="course-enroll-tbody"></tbody></table>
+      </div>
+      <div class="tw">
+        <div class="tw-header"><span class="tw-title">Student Enrollment Details</span><input class="tw-search" type="text" placeholder="Search student..." oninput="filterTbl('se-tbody',this.value,[0,1,2])"/></div>
+        <table class="at"><thead><tr><th>Student</th><th>Email</th><th>Course</th><th>Enrolled On</th><th>Progress</th><th>Status</th><th>Feedback</th></tr></thead>
+        <tbody id="se-tbody"></tbody></table>
+      </div>
+    </div>
+
+    <!-- ALL STUDENTS -->
+    <div class="admin-section" id="sec-users">
+      <div class="admin-header"><div class="admin-title">&#128101; All Students</div><span class="admin-badge">&#128272; Admin Only</span></div>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-val">50,241</div><div class="kpi-label">Total Students</div></div>
+        <div class="kpi"><div class="kpi-val">8,432</div><div class="kpi-label">Pro</div></div>
+        <div class="kpi"><div class="kpi-val">312</div><div class="kpi-label">Team</div></div>
+        <div class="kpi"><div class="kpi-val">41,497</div><div class="kpi-label">Free</div></div>
+      </div>
+      <div class="tw">
+        <div class="tw-header"><span class="tw-title">Student List</span><input class="tw-search" type="text" placeholder="Search..." oninput="filterTbl('u-tbody',this.value,[0,1])"/></div>
+        <table class="at"><thead><tr><th>Student</th><th>Email</th><th>Plan</th><th>Courses</th><th>Last Active</th><th>Revenue</th><th>Status</th></tr></thead><tbody id="u-tbody"></tbody></table>
+      </div>
+    </div>
+
+    <!-- COMPLAINTS -->
+    <div class="admin-section" id="sec-complaints">
+      <div class="admin-header"><div class="admin-title">&#128226; Complaints & Feedback Analysis</div><span class="admin-badge">&#128272; Admin Only</span></div>
+      
+      <!-- Analysis Overview -->
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-val" style="color:#10b981">120</div><div class="kpi-label">Positive Feedback</div><div class="kpi-change">48% of total</div></div>
+        <div class="kpi"><div class="kpi-val" style="color:#ef4444">80</div><div class="kpi-label">Negative Feedback</div><div class="kpi-change">32% of total</div></div>
+        <div class="kpi"><div class="kpi-val" style="color:#f59e0b">45</div><div class="kpi-label">Complaints</div><div class="kpi-change">18% of total</div></div>
+        <div class="kpi"><div class="kpi-val">5</div><div class="kpi-label">Neutral</div><div class="kpi-change">2% of total</div></div>
+      </div>
+      <!-- Category Breakdown -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.25rem;margin-bottom:1.75rem">
+        <div class="tw">
+          <div class="tw-header"><span class="tw-title">Sentiment by Category</span></div>
+          <table class="at">
+            <thead><tr><th>Category</th><th>Positive</th><th>Negative</th><th>Complaints</th><th>Total</th></tr></thead>
+            <tbody id="category-analysis-tbody"></tbody>
+          </table>
+        </div>
+        <div class="tw">
+          <div class="tw-header"><span class="tw-title">Top Issues</span></div>
+          <div id="top-issues-list"></div>
+        </div>
+      </div>
+
+      <!-- All Feedback & Complaints -->
+      <div class="tw">
+        <div class="tw-header"><span class="tw-title">All Feedback & Complaints (250+ items)</span><input class="tw-search" type="text" placeholder="Search..." oninput="filterFeedback(this.value)"/></div>
+        <table class="at">
+          <thead><tr><th>ID</th><th>User</th><th>Text</th><th>Type</th><th>Category</th><th>Date</th><th>Keywords</th></tr></thead>
+          <tbody id="feedback-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- FEEDBACK JOURNEYS -->
+    <div class="admin-section" id="sec-feedback">
+      <div class="admin-header"><div class="admin-title">&#128172; Student Feedback Journeys</div><span class="admin-badge">&#128272; Admin Only</span></div>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-val">1,240</div><div class="kpi-label">Total Feedback</div></div>
+        <div class="kpi"><div class="kpi-val">18</div><div class="kpi-label">Features Shipped</div></div>
+        <div class="kpi"><div class="kpi-val">847</div><div class="kpi-label">Votes on Top Issue</div></div>
+        <div class="kpi"><div class="kpi-val">94%</div><div class="kpi-label">Satisfaction</div></div>
+      </div>
+      <div id="fb-list"></div>
+    </div>
+
+    <!-- REFERRALS -->
+    <div class="admin-section" id="sec-referrals">
+      <div class="admin-header"><div class="admin-title">&#127381; Referral History</div><span class="admin-badge">&#128272; Admin Only</span></div>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-val">3,412</div><div class="kpi-label">Total Referrals</div></div>
+        <div class="kpi"><div class="kpi-val">2,559</div><div class="kpi-label">Converted</div></div>
+        <div class="kpi"><div class="kpi-val">&#8377;6.8L</div><div class="kpi-label">Rewards Paid</div></div>
+        <div class="kpi"><div class="kpi-val">75%</div><div class="kpi-label">Conversion Rate</div></div>
+      </div>
+      <div class="tw">
+        <div class="tw-header"><span class="tw-title">All Referral Transactions</span><input class="tw-search" type="text" placeholder="Search..." oninput="filterTbl('r-tbody',this.value,[0,1,2])"/></div>
+        <table class="at"><thead><tr><th>Referrer</th><th>Ref Code</th><th>Referred Student</th><th>Plan</th><th>Date</th><th>Reward</th><th>Status</th></tr></thead><tbody id="r-tbody"></tbody></table>
+      </div>
+    </div>
+
+    <!-- REVIEWS -->
+    <div class="admin-section" id="sec-reviews">
+      <div class="admin-header"><div class="admin-title">&#11088; Student Reviews</div><span class="admin-badge">&#128272; Admin Only</span></div>
+      <div class="tw">
+        <div class="tw-header"><span class="tw-title">All Reviews</span><input class="tw-search" type="text" placeholder="Search..." oninput="filterTbl('rv-tbody',this.value,[0,1])"/></div>
+        <table class="at"><thead><tr><th>Student</th><th>Course</th><th>Rating</th><th>Review</th><th>Date</th><th>Status</th></tr></thead><tbody id="rv-tbody"></tbody></table>
+      </div>
+    </div>
+
+    <!-- REVENUE -->
+    <div class="admin-section" id="sec-revenue">
+      <div class="admin-header"><div class="admin-title">&#128176; Revenue Streams</div><span class="admin-badge">&#128272; Admin Only</span></div>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-val">&#8377;2.4Cr</div><div class="kpi-label">Annual Revenue</div><div class="kpi-change">&#8593; 68% YoY</div></div>
+        <div class="kpi"><div class="kpi-val">&#8377;84.3L</div><div class="kpi-label">Monthly Revenue</div><div class="kpi-change">&#8593; 12% MoM</div></div>
+        <div class="kpi"><div class="kpi-val">68%</div><div class="kpi-label">Gross Margin</div></div>
+        <div class="kpi"><div class="kpi-val">&#8377;340</div><div class="kpi-label">Avg Revenue/User</div></div>
+      </div>
+      <div class="tw">
+        <div class="tw-header"><span class="tw-title">Revenue by Stream</span></div>
+        <table class="at"><thead><tr><th>Stream</th><th>Monthly</th><th>% of Total</th><th>Type</th><th>Trend</th></tr></thead>
+        <tbody>
+          <tr><td>&#128203; Subscriptions</td><td class="inflow">&#8377;52,40,000</td><td>62%</td><td>Recurring</td><td style="color:#10b981">&#8593; 14%</td></tr>
+          <tr><td>&#128227; Advertising</td><td class="inflow">&#8377;12,60,000</td><td>15%</td><td>Variable</td><td style="color:#10b981">&#8593; 8%</td></tr>
+          <tr><td>&#128176; Transaction Fees</td><td class="inflow">&#8377;10,10,000</td><td>12%</td><td>Variable</td><td style="color:#10b981">&#8593; 11%</td></tr>
+          <tr><td>&#129309; Partnerships</td><td class="inflow">&#8377;5,90,000</td><td>7%</td><td>Recurring</td><td style="color:#10b981">&#8593; 22%</td></tr>
+          <tr><td>&#128722; Resource Sales</td><td class="inflow">&#8377;2,50,000</td><td>3%</td><td>Variable</td><td style="color:#10b981">&#8593; 5%</td></tr>
+          <tr><td><strong>Total</strong></td><td class="net">&#8377;84,30,000</td><td>100%</td><td></td><td style="color:#10b981">&#8593; 12%</td></tr>
+        </tbody></table>
+      </div>
+    </div>
+
+    <!-- CASH FLOW -->
+    <div class="admin-section" id="sec-cashflow">
+      <div class="admin-header"><div class="admin-title">&#128200; Cash Flow</div><span class="admin-badge">&#128272; Admin Only</span></div>
+      <div class="tw">
+        <div class="tw-header"><span class="tw-title">January 2025 &mdash; Monthly P&amp;L</span></div>
+        <table class="at"><thead><tr><th>Category</th><th>Item</th><th>Amount</th><th>Type</th></tr></thead>
+        <tbody>
+          <tr><td>Inflow</td><td>Subscription Revenue</td><td class="inflow">+&#8377;52,40,000</td><td>Recurring</td></tr>
+          <tr><td>Inflow</td><td>Advertising Revenue</td><td class="inflow">+&#8377;12,60,000</td><td>Variable</td></tr>
+          <tr><td>Inflow</td><td>Transaction Fees</td><td class="inflow">+&#8377;10,10,000</td><td>Variable</td></tr>
+          <tr><td>Inflow</td><td>Partnerships</td><td class="inflow">+&#8377;5,90,000</td><td>Recurring</td></tr>
+          <tr><td>Inflow</td><td>Resource Sales</td><td class="inflow">+&#8377;3,30,000</td><td>Variable</td></tr>
+          <tr><td>Outflow</td><td>Instructor Payouts</td><td class="outflow">-&#8377;9,29,200</td><td>Variable</td></tr>
+          <tr><td>Outflow</td><td>Infrastructure</td><td class="outflow">-&#8377;4,20,000</td><td>Fixed</td></tr>
+          <tr><td>Outflow</td><td>Team Salaries</td><td class="outflow">-&#8377;18,50,000</td><td>Fixed</td></tr>
+          <tr><td>Outflow</td><td>Marketing &amp; Ads</td><td class="outflow">-&#8377;8,40,000</td><td>Variable</td></tr>
+          <tr><td>Outflow</td><td>Payment Gateway</td><td class="outflow">-&#8377;1,68,000</td><td>Variable</td></tr>
+          <tr><td>Outflow</td><td>Customer Support</td><td class="outflow">-&#8377;2,10,000</td><td>Fixed</td></tr>
+          <tr><td colspan="2"><strong>Net Cash Flow</strong></td><td class="net">+&#8377;40,12,800</td><td><strong>Profit</strong></td></tr>
+        </tbody></table>
+      </div>
+    </div>
+
+    <!-- PARTNERSHIPS -->
+    <div class="admin-section" id="sec-partners">
+      <div class="admin-header"><div class="admin-title">&#129309; Partnerships</div><span class="admin-badge">&#128272; Admin Only</span></div>
+      <div class="tw">
+        <div class="tw-header"><span class="tw-title">Active Partners</span></div>
+        <table class="at"><thead><tr><th>Partner</th><th>Type</th><th>Monthly Revenue</th><th>Contract End</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>&#128396; Figma</td><td>Technology</td><td class="inflow">&#8377;2,10,000</td><td>Dec 2025</td><td><span class="sb sb-ok">Active</span></td></tr>
+          <tr><td>&#127775; Adobe</td><td>Technology</td><td class="inflow">&#8377;1,80,000</td><td>Jun 2025</td><td><span class="sb sb-ok">Active</span></td></tr>
+          <tr><td>&#127775; Canva</td><td>Content</td><td class="inflow">&#8377;1,20,000</td><td>Mar 2026</td><td><span class="sb sb-ok">Active</span></td></tr>
+          <tr><td>&#127979; NASSCOM</td><td>Certification</td><td class="inflow">&#8377;50,000</td><td>Dec 2025</td><td><span class="sb sb-ok">Active</span></td></tr>
+          <tr><td>&#128188; LinkedIn Learning</td><td>Distribution</td><td class="inflow">&#8377;30,000</td><td>Pilot</td><td><span class="sb sb-warn">Pilot</span></td></tr>
+        </tbody></table>
+      </div>
+    </div>
+
+    <!-- MARKETING -->
+    <div class="admin-section" id="sec-marketing">
+      <div class="admin-header"><div class="admin-title">&#128227; Marketing Strategy</div><span class="admin-badge">&#128272; Admin Only</span></div>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-val">&#8377;340</div><div class="kpi-label">CAC</div><div class="kpi-change">&#8595; 18% this year</div></div>
+        <div class="kpi"><div class="kpi-val">&#8377;17,200</div><div class="kpi-label">LTV</div><div class="kpi-change">LTV:CAC = 50:1</div></div>
+        <div class="kpi"><div class="kpi-val">2.5M</div><div class="kpi-label">Monthly Impressions</div></div>
+        <div class="kpi"><div class="kpi-val">3.2%</div><div class="kpi-label">Conversion Rate</div></div>
+      </div>
+      <div class="tw" style="margin-bottom:1.25rem">
+        <div class="tw-header"><span class="tw-title">Channel Performance</span></div>
+        <table class="at"><thead><tr><th>Channel</th><th>Type</th><th>CAC</th><th>ROAS</th><th>% Acquisition</th></tr></thead>
+        <tbody>
+          <tr><td>&#128269; SEO / Organic</td><td>Inbound</td><td class="inflow">&#8377;0</td><td>&#8734;</td><td>45%</td></tr>
+          <tr><td>&#128101; Referral Program</td><td>Viral</td><td class="inflow">&#8377;200</td><td>8.6x</td><td>28%</td></tr>
+          <tr><td>&#128269; Google Ads</td><td>Paid</td><td>&#8377;280</td><td>5.2x</td><td>15%</td></tr>
+          <tr><td>&#128247; Meta Ads</td><td>Paid</td><td>&#8377;390</td><td>4.1x</td><td>8%</td></tr>
+          <tr><td>&#128188; LinkedIn Ads</td><td>Paid</td><td>&#8377;520</td><td>3.8x</td><td>4%</td></tr>
+        </tbody></table>
+      </div>
+      <div class="tw">
+        <div class="tw-header"><span class="tw-title">Active Campaigns</span></div>
+        <table class="at"><thead><tr><th>Campaign</th><th>Channel</th><th>Budget/mo</th><th>ROAS</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Design Your Future</td><td>Google Search</td><td>&#8377;3,20,000</td><td>5.2x</td><td><span class="sb sb-ok">Live</span></td></tr>
+          <tr><td>Before &amp; After Reels</td><td>Instagram</td><td>&#8377;2,80,000</td><td>4.1x</td><td><span class="sb sb-ok">Live</span></td></tr>
+          <tr><td>Free Figma Masterclass</td><td>Lead Gen</td><td>&#8377;1,20,000</td><td>6.7x</td><td><span class="sb sb-ok">Live</span></td></tr>
+          <tr><td>Design Week India 2025</td><td>Sponsorship</td><td>&#8377;8,00,000</td><td>TBD</td><td><span class="sb sb-warn">Planned</span></td></tr>
+        </tbody></table>
+      </div>
+    </div>
+
+    <!-- SECURITY -->
+    <div class="admin-section" id="sec-security">
+      <div class="admin-header"><div class="admin-title">&#128274; Security &amp; Compliance</div><span class="admin-badge">&#128272; Admin Only</span></div>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-val" style="color:#10b981">0</div><div class="kpi-label">Active Incidents</div></div>
+        <div class="kpi"><div class="kpi-val" style="color:#10b981">100%</div><div class="kpi-label">Uptime (30d)</div></div>
+        <div class="kpi"><div class="kpi-val">Jan 2025</div><div class="kpi-label">Last Audit</div></div>
+        <div class="kpi"><div class="kpi-val" style="color:#10b981">7/7</div><div class="kpi-label">Compliance Checks</div></div>
+      </div>
+      <div class="tw" style="margin-bottom:1.25rem">
+        <div class="tw-header"><span class="tw-title">Encryption Audit</span></div>
+        <table class="at"><thead><tr><th>Component</th><th>Protocol</th><th>Key Length</th><th>Last Rotated</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>HTTPS/TLS</td><td>TLS 1.3</td><td>256-bit</td><td>Jan 2025</td><td><span class="sb sb-ok">&#9989; Secure</span></td></tr>
+          <tr><td>Database at Rest</td><td>AES-256-GCM</td><td>256-bit</td><td>Dec 2024</td><td><span class="sb sb-ok">&#9989; Secure</span></td></tr>
+          <tr><td>Passwords</td><td>bcrypt (cost 12)</td><td>N/A</td><td>N/A</td><td><span class="sb sb-ok">&#9989; Secure</span></td></tr>
+          <tr><td>JWT Sessions</td><td>HMAC-SHA256</td><td>15min expiry</td><td>Rolling</td><td><span class="sb sb-ok">&#9989; Secure</span></td></tr>
+          <tr><td>Payments</td><td>Razorpay PCI-DSS</td><td>Tokenised</td><td>N/A</td><td><span class="sb sb-ok">&#9989; Secure</span></td></tr>
+        </tbody></table>
+      </div>
+      <div class="tw">
+        <div class="tw-header"><span class="tw-title">Compliance Checklist</span></div>
+        <table class="at"><thead><tr><th>Requirement</th><th>Standard</th><th>Status</th><th>Last Audit</th></tr></thead>
+        <tbody>
+          <tr><td>Encryption at rest</td><td>ISO 27001</td><td><span class="sb sb-ok">&#9989; Compliant</span></td><td>Jan 2025</td></tr>
+          <tr><td>Payment data isolation</td><td>PCI DSS L1</td><td><span class="sb sb-ok">&#9989; Compliant</span></td><td>Dec 2024</td></tr>
+          <tr><td>Right to erasure</td><td>GDPR Art.17</td><td><span class="sb sb-ok">&#9989; Compliant</span></td><td>Feb 2025</td></tr>
+          <tr><td>Breach notification 72h</td><td>GDPR Art.33</td><td><span class="sb sb-ok">&#9989; Compliant</span></td><td>Feb 2025</td></tr>
+          <tr><td>Sensitive data protection</td><td>IT Act 2000</td><td><span class="sb sb-ok">&#9989; Compliant</span></td><td>Jan 2025</td></tr>
+        </tbody></table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Complaint Modal -->
+<div class="modal-overlay" id="c-modal">
+  <div class="modal">
+    <div class="modal-hdr"><h3 id="m-title" style="font-size:1rem;font-weight:700">Complaint Detail</h3><button class="modal-close" onclick="document.getElementById('c-modal').classList.remove('open')">&#10005;</button></div>
+    <div id="m-body"></div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  if (!Auth.isLoggedIn() || !Auth.isAdmin()) {
+    window.location.href = Auth.isLoggedIn() ? 'dashboard.html' : 'auth.html';
+    return;
+  }
+  var user = Auth.getUser();
+  if (user) document.getElementById('admin-name-badge').textContent = user.name || 'Admin';
+
+  window.showSec = function(id, el) {
+    document.querySelectorAll('.admin-section').forEach(function(s){s.classList.remove('active');});
+    document.querySelectorAll('.admin-nav a').forEach(function(a){a.classList.remove('active');});
+    var sec = document.getElementById('sec-'+id);
+    if (sec) sec.classList.add('active');
+    if (el) el.classList.add('active');
+  };
+
+  window.filterTbl = function(tbodyId, q, cols) {
+    var rows = document.getElementById(tbodyId).querySelectorAll('tr');
+    rows.forEach(function(r){
+      var text = cols.map(function(c){return r.cells[c]?r.cells[c].textContent.toLowerCase():'';}).join(' ');
+      r.style.display = text.includes(q.toLowerCase()) ? '' : 'none';
+    });
+  };
+
+  // COURSE ENROLLMENT DATA
+  var COURSE_STATS = [
+    {emoji:'&#127912;',title:'UI/UX Design Fundamentals',instructor:'Priya Sharma',enrolled:12400,completion:78,rating:4.9,certs:9672,revenue:'&#8377;1.24Cr'},
+    {emoji:'&#127752;',title:'Color Theory Masterclass',instructor:'Vikram Joshi',enrolled:22100,completion:91,rating:4.9,certs:20111,revenue:'&#8377;1.1Cr'},
+    {emoji:'&#128444;',title:'Graphic Design Bootcamp',instructor:'Sneha Patel',enrolled:15200,completion:72,rating:4.7,certs:10944,revenue:'&#8377;1.21Cr'},
+    {emoji:'&#128311;',title:'Design Patterns & Systems',instructor:'Rahul Verma',enrolled:5100,completion:65,rating:4.9,certs:3315,revenue:'&#8377;1.02Cr'},
+    {emoji:'&#9999;',title:'Advanced Figma Mastery',instructor:'Arjun Mehta',enrolled:8700,completion:69,rating:4.8,certs:6003,revenue:'&#8377;1.3Cr'},
+    {emoji:'&#127917;',title:'Art Styles: Minimal to Brutalism',instructor:'Kavya Nair',enrolled:9800,completion:83,rating:4.6,certs:8134,revenue:'&#8377;68.6L'},
+    {emoji:'&#128188;',title:'Brand Identity Design',instructor:'Dev Kapoor',enrolled:7300,completion:74,rating:4.8,certs:5402,revenue:'&#8377;94.9L'},
+    {emoji:'&#10024;',title:'Motion Design & Micro-interactions',instructor:'Ananya Singh',enrolled:4600,completion:61,rating:4.7,certs:2806,revenue:'&#8377;82.7L'},
+  ];
+
+  document.getElementById('course-enroll-tbody').innerHTML = COURSE_STATS.map(function(c){
+    var bar = '<div class="prog-bar"><div class="prog-fill" style="width:'+c.completion+'%"></div></div>';
+    return '<tr><td>'+c.emoji+' '+c.title+'</td><td>'+c.instructor+'</td><td style="font-weight:600;color:var(--accent-secondary)">'+c.enrolled.toLocaleString()+'</td><td>'+bar+' '+c.completion+'%</td><td style="color:var(--accent-gold)">'+c.rating+'&#9733;</td><td>'+c.certs.toLocaleString()+'</td><td class="inflow">'+c.revenue+'</td></tr>';
+  }).join('');
+
+  // STUDENT ENROLLMENT DETAILS
+  var STUDENT_ENROLLMENTS = [
+    {i:'RK',n:'Riya Kapoor',e:'riya@example.com',course:'UI/UX Design Fundamentals',date:'Jan 5, 2025',progress:68,status:'active',feedback:'Great course!'},
+    {i:'AS',n:'Aditya Sharma',e:'aditya@example.com',course:'Graphic Design Bootcamp',date:'Dec 20, 2024',progress:42,status:'active',feedback:'Very helpful'},
+    {i:'MJ',n:'Meera Joshi',e:'meera@example.com',course:'Color Theory Masterclass',date:'Nov 15, 2024',progress:100,status:'completed',feedback:'Excellent!'},
+    {i:'KP',n:'Karan Patel',e:'karan@example.com',course:'Design Patterns & Systems',date:'Oct 10, 2024',progress:85,status:'active',feedback:'In-depth content'},
+    {i:'AN',n:'Ananya Singh',e:'ananya@example.com',course:'Advanced Figma Mastery',date:'Sep 5, 2024',progress:100,status:'completed',feedback:'Best Figma course'},
+    {i:'VN',n:'Vikram Nair',e:'vikram@example.com',course:'UI/UX Design Fundamentals',date:'Aug 20, 2024',progress:15,status:'inactive',feedback:'No feedback yet'},
+    {i:'PR',n:'Priya Reddy',e:'priya@example.com',course:'Brand Identity Design',date:'Jan 12, 2025',progress:55,status:'active',feedback:'Loving it so far'},
+    {i:'DM',n:'Dev Mehta',e:'dev@example.com',course:'Motion Design & Micro-interactions',date:'Dec 1, 2024',progress:30,status:'active',feedback:'Complex but good'},
+    {i:'SG',n:'Sneha Gupta',e:'sneha@example.com',course:'Color Theory Masterclass',date:'Nov 1, 2024',progress:100,status:'completed',feedback:'Certificate earned!'},
+    {i:'RK2',n:'Rohit Kumar',e:'rohit@example.com',course:'Art Styles: Minimal to Brutalism',date:'Jan 8, 2025',progress:22,status:'active',feedback:'No feedback yet'},
+  ];
+  var stsc = {active:'sb-ok',completed:'sb-pro',inactive:'sb-muted'};
+  document.getElementById('se-tbody').innerHTML = STUDENT_ENROLLMENTS.map(function(s){
+    var bar = '<div class="prog-bar"><div class="prog-fill" style="width:'+s.progress+'%"></div></div>';
+    return '<tr><td><span class="uav">'+s.i+'</span>'+s.n+'</td><td style="color:var(--text-muted)">'+s.e+'</td><td>'+s.course+'</td><td>'+s.date+'</td><td>'+bar+' '+s.progress+'%</td><td><span class="sb '+stsc[s.status]+'">'+s.status+'</span></td><td style="font-style:italic;color:var(--text-muted)">'+s.feedback+'</td></tr>';
+  }).join('');
+
+  // TOP COURSES for overview
+  document.getElementById('top-courses-list').innerHTML = COURSE_STATS.slice(0,5).map(function(c){
+    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:.6rem 0;border-bottom:1px solid var(--border)">' +
+      '<div style="font-size:.82rem;font-weight:600">'+c.emoji+' '+c.title+'</div>' +
+      '<div style="font-size:.78rem;color:var(--accent-secondary);font-weight:700">'+c.enrolled.toLocaleString()+' enrolled</div>' +
+      '</div>';
+  }).join('');
+
+  // RECENT FEEDBACK for overview
+  var RECENT_FB = [
+    {user:'Riya Kapoor',text:'Course player sync issue fixed — amazing!',date:'Jan 2025',status:'shipped'},
+    {user:'Aditya Sharma',text:'Need dark mode for design library',date:'Nov 2024',status:'progress'},
+    {user:'Meera Joshi',text:'Add quiz retake option after failing',date:'Oct 2024',status:'planned'},
+  ];
+  var fsc2 = {shipped:'sb-ok',progress:'sb-warn',planned:'sb-pro'};
+  document.getElementById('recent-feedback-list').innerHTML = RECENT_FB.map(function(f){
+    return '<div style="padding:.75rem 0;border-bottom:1px solid var(--border)">' +
+      '<div style="display:flex;justify-content:space-between;margin-bottom:.25rem">' +
+        '<span style="font-size:.82rem;font-weight:600">'+f.user+'</span>' +
+        '<span class="sb '+fsc2[f.status]+'">'+f.status+'</span>' +
+      '</div>' +
+      '<div style="font-size:.78rem;color:var(--text-secondary)">'+f.text+'</div>' +
+      '<div style="font-size:.7rem;color:var(--text-muted);margin-top:.2rem">'+f.date+'</div>' +
+      '</div>';
+  }).join('');
+
+  // STUDENTS
+  var USERS = [
+    {i:'RK',n:'Riya Kapoor',e:'riya@example.com',p:'Pro',c:6,l:'2 hours ago',r:'&#8377;999',s:'active'},
+    {i:'AS',n:'Aditya Sharma',e:'aditya@example.com',p:'Pro',c:4,l:'1 day ago',r:'&#8377;999',s:'active'},
+    {i:'MJ',n:'Meera Joshi',e:'meera@example.com',p:'Free',c:2,l:'3 days ago',r:'&#8377;0',s:'trial'},
+    {i:'KP',n:'Karan Patel',e:'karan@example.com',p:'Team',c:8,l:'5 hours ago',r:'&#8377;2,499',s:'active'},
+    {i:'AN',n:'Ananya Singh',e:'ananya@example.com',p:'Pro',c:5,l:'2 days ago',r:'&#8377;999',s:'active'},
+    {i:'VN',n:'Vikram Nair',e:'vikram@example.com',p:'Free',c:1,l:'1 week ago',r:'&#8377;0',s:'churned'},
+    {i:'PR',n:'Priya Reddy',e:'priya@example.com',p:'Pro',c:7,l:'1 hour ago',r:'&#8377;999',s:'active'},
+    {i:'RK2',n:'Rohit Kumar',e:'rohit@example.com',p:'Free',c:3,l:'4 days ago',r:'&#8377;0',s:'trial'},
+    {i:'SG',n:'Sneha Gupta',e:'sneha@example.com',p:'Team',c:10,l:'30 min ago',r:'&#8377;2,499',s:'active'},
+    {i:'DM',n:'Dev Mehta',e:'dev@example.com',p:'Pro',c:4,l:'6 hours ago',r:'&#8377;999',s:'active'},
+  ];
+  var pc={Pro:'sb-pro',Team:'sb-cyan',Free:'sb-muted'};
+  var sc={active:'sb-ok',trial:'sb-warn',churned:'sb-err'};
+  document.getElementById('u-tbody').innerHTML=USERS.map(function(u){
+    return '<tr><td><span class="uav">'+u.i+'</span>'+u.n+'</td><td style="color:var(--text-muted)">'+u.e+'</td><td><span class="sb '+pc[u.p]+'">'+u.p+'</span></td><td>'+u.c+'</td><td>'+u.l+'</td><td style="color:var(--accent-secondary);font-weight:600">'+u.r+'</td><td><span class="sb '+sc[u.s]+'">'+u.s+'</span></td></tr>';
+  }).join('');
+
+  // Generate sample feedback data (250+ items)
+  function generateSampleFeedback() {
+    var users = ['Riya Kapoor', 'Aditya Sharma', 'Meera Joshi', 'Karan Patel', 'Ananya Singh', 'Vikram Nair', 'Priya Reddy', 'Rohit Kumar', 'Sneha Patel', 'Dev Kapoor', 'Kavya Nair', 'Rahul Verma', 'Arjun Mehta', 'Sneha Gupta', 'Priya Sharma'];
+    var positiveTexts = [
+      'This course is absolutely amazing! The instructor explains everything so clearly.',
+      'Best design course I\'ve ever taken. Highly recommend!',
+      'Excellent content and well-structured. Very helpful for beginners.',
+      'Love the practical projects. Great learning experience!',
+      'Fantastic instructor! Made complex topics easy to understand.',
+      'Amazing platform! The design library is incredible.',
+      'Wonderful course structure. Perfect for self-paced learning.',
+      'Outstanding quality content. Worth every penny.',
+      'Brilliant teaching methodology. Very engaging.',
+      'Perfect course for career advancement.'
+    ];
+    var negativeTexts = [
+      'Video quality is terrible. Cannot see the content clearly.',
+      'Worst customer support experience. No response for days.',
+      'Payment system is broken. Money deducted but no access.',
+      'Course content is outdated. Very disappointed.',
+      'Mobile app is terrible. Crashes constantly.',
+      'Frustrating experience with certificate generation.',
+      'Poor video quality and audio issues.',
+      'Disappointing course quality. Not worth the price.',
+      'Horrible user interface. Difficult to navigate.',
+      'Awful customer service response time.'
+    ];
+    var complaintTexts = [
+      'Complaint: Video not loading on mobile Safari browser.',
+      'Issue with certificate not generating after course completion.',
+      'Payment deducted but enrollment not confirmed. Need refund.',
+      'Bug in quiz system - answers not saving properly.',
+      'Problem with course recommendation algorithm.',
+      'Error in subscription renewal. Please cancel my plan.',
+      'Technical issue: Cannot access course materials.',
+      'Failed payment processing. Money debited twice.',
+      'Stuck in course progress. Cannot mark as complete.',
+      'Unable to download course resources.'
+    ];
+    var categories = ['Course Quality', 'Technical', 'Payment', 'Certificate', 'Platform', 'Instructor', 'Support'];
+    
+    var data = [];
+    var id = 1;
+    var date = new Date();
+    
+    // Generate 120 positive
+    for (var i = 0; i < 120; i++) {
+      var text = positiveTexts[Math.floor(Math.random() * positiveTexts.length)];
+      data.push({
+        id: 'FB-2025-' + String(id++).padStart(4, '0'),
+        user: users[Math.floor(Math.random() * users.length)],
+        text: text,
+        type: 'positive',
+        date: new Date(date.getTime() - Math.random() * 365 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+        category: categories[Math.floor(Math.random() * categories.length)],
+        keywords: extractKeywords(text, 'positive')
+      });
+    }
+    
+    // Generate 80 negative
+    for (var i = 0; i < 80; i++) {
+      var text = negativeTexts[Math.floor(Math.random() * negativeTexts.length)];
+      data.push({
+        id: 'FB-2025-' + String(id++).padStart(4, '0'),
+        user: users[Math.floor(Math.random() * users.length)],
+        text: text,
+        type: 'negative',
+        date: new Date(date.getTime() - Math.random() * 365 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+        category: categories[Math.floor(Math.random() * categories.length)],
+        keywords: extractKeywords(text, 'negative')
+      });
+    }
+    
+    // Generate 45 complaints
+    for (var i = 0; i < 45; i++) {
+      var text = complaintTexts[Math.floor(Math.random() * complaintTexts.length)];
+      data.push({
+        id: 'CMP-2025-' + String(i + 1).padStart(4, '0'),
+        user: users[Math.floor(Math.random() * users.length)],
+        text: text,
+        type: 'complaint',
+        date: new Date(date.getTime() - Math.random() * 365 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+        category: categories[Math.floor(Math.random() * categories.length)],
+        keywords: extractKeywords(text, 'complaint')
+      });
+    }
+    
+    // Generate 5 neutral
+    for (var i = 0; i < 5; i++) {
+      data.push({
+        id: 'FB-2025-' + String(id++).padStart(4, '0'),
+        user: users[Math.floor(Math.random() * users.length)],
+        text: 'The course is okay, nothing special.',
+        type: 'neutral',
+        date: new Date(date.getTime() - Math.random() * 365 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+        category: categories[Math.floor(Math.random() * categories.length)],
+        keywords: []
+      });
+    }
+    
+    return data;
+  }
+  
+  function extractKeywords(text, type) {
+    var keywords = [];
+    var lowerText = text.toLowerCase();
+    if (type === 'positive') {
+      ['amazing', 'great', 'excellent', 'love', 'best', 'helpful', 'fantastic', 'wonderful', 'perfect', 'brilliant', 'outstanding'].forEach(function(word) {
+        if (lowerText.includes(word)) keywords.push(word);
+      });
+    } else if (type === 'negative') {
+      ['terrible', 'worst', 'disappointed', 'frustrating', 'slow', 'broken', 'horrible', 'awful', 'poor', 'disgusting', 'hate'].forEach(function(word) {
+        if (lowerText.includes(word)) keywords.push(word);
+      });
+    } else if (type === 'complaint') {
+      ['complaint', 'issue', 'problem', 'bug', 'error', 'refund', 'cancel', 'not working', 'failed', 'stuck', 'unable'].forEach(function(word) {
+        if (lowerText.includes(word)) keywords.push(word);
+      });
+    }
+    return keywords;
+  }
+  
+  var COMPLAINTS_FEEDBACK = generateSampleFeedback();
+
+  // Categorization function based on keywords
+  function categorizeFeedback(text) {
+    var lowerText = text.toLowerCase();
+    var positiveKeywords = ['great', 'excellent', 'amazing', 'love', 'best', 'helpful', 'fantastic', 'awesome', 'wonderful', 'perfect', 'brilliant', 'outstanding'];
+    var negativeKeywords = ['bad', 'terrible', 'worst', 'disappointed', 'frustrating', 'slow', 'broken', 'horrible', 'awful', 'poor', 'disgusting', 'hate'];
+    var complaintKeywords = ['complaint', 'issue', 'problem', 'bug', 'error', 'refund', 'cancel', 'not working', 'failed', 'stuck', 'unable'];
+    
+    for (var word of positiveKeywords) {
+      if (lowerText.includes(word)) return 'positive';
+    }
+    for (var word of negativeKeywords) {
+      if (lowerText.includes(word)) return 'negative';
+    }
+    for (var word of complaintKeywords) {
+      if (lowerText.includes(word)) return 'complaint';
+    }
+    return 'neutral';
+  }
+
+  // Analyze feedback data
+  function analyzeFeedback() {
+    var analysis = { positive: 0, negative: 0, complaint: 0, neutral: 0, categories: {} };
+    COMPLAINTS_FEEDBACK.forEach(function(item) {
+      var type = categorizeFeedback(item.text);
+      analysis[type]++;
+      if (!analysis.categories[item.category]) analysis.categories[item.category] = { positive: 0, negative: 0, complaint: 0, neutral: 0 };
+      analysis.categories[item.category][type]++;
+    });
+    return analysis;
+  }
+
+  var analysis = analyzeFeedback();
+  // Populate category analysis
+  var catAnalysis = '';
+  for (var cat in analysis.categories) {
+    var c = analysis.categories[cat];
+    var total = c.positive + c.negative + c.complaint + c.neutral;
+    catAnalysis += '<tr><td>' + cat + '</td><td style="color:#10b981;font-weight:600">' + c.positive + '</td><td style="color:#ef4444;font-weight:600">' + c.negative + '</td><td style="color:#f59e0b;font-weight:600">' + c.complaint + '</td><td>' + total + '</td></tr>';
+  }
+  document.getElementById('category-analysis-tbody').innerHTML = catAnalysis;
+
+  // Top issues
+  var topIssues = [
+    {issue:'Video loading issues',count:25,category:'Technical'},
+    {issue:'Payment processing problems',count:18,category:'Payment'},
+    {issue:'Certificate generation failures',count:15,category:'Certificate'},
+    {issue:'Mobile app crashes',count:12,category:'Technical'},
+    {issue:'Course recommendation errors',count:8,category:'Platform'}
+  ];
+  var issuesHtml = topIssues.map(function(issue){
+    return '<div style="display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid var(--border)">' +
+      '<div><strong>' + issue.issue + '</strong><br><small style="color:var(--text-muted)">' + issue.category + '</small></div>' +
+      '<div style="color:#ef4444;font-weight:600">' + issue.count + '</div>' +
+      '</div>';
+  }).join('');
+  document.getElementById('top-issues-list').innerHTML = issuesHtml;
+
+  // Populate feedback table (showing first 50 for performance)
+  var feedbackHtml = COMPLAINTS_FEEDBACK.slice(0,50).map(function(item){
+    var typeColor = item.type === 'positive' ? '#10b981' : item.type === 'negative' ? '#ef4444' : item.type === 'complaint' ? '#f59e0b' : '#6b7280';
+    return '<tr><td style="font-family:monospace;font-size:.7rem">' + item.id + '</td><td>' + item.user + '</td><td style="max-width:300px;word-wrap:break-word">' + item.text + '</td><td><span style="color:' + typeColor + ';font-weight:600;text-transform:capitalize">' + item.type + '</span></td><td>' + item.category + '</td><td>' + item.date + '</td><td style="font-size:.75rem;color:var(--text-muted)">' + (item.keywords ? item.keywords.join(', ') : '') + '</td></tr>';
+  }).join('');
+  document.getElementById('feedback-tbody').innerHTML = feedbackHtml;
+
+  // Filter function for feedback
+  window.filterFeedback = function(q) {
+    var rows = document.getElementById('feedback-tbody').querySelectorAll('tr');
+    rows.forEach(function(r){
+      var text = r.cells[1].textContent + ' ' + r.cells[2].textContent + ' ' + r.cells[3].textContent + ' ' + r.cells[4].textContent;
+      r.style.display = text.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
+    });
+  };
+
+  window.openC = function(c) {
+    document.getElementById('m-title').textContent = c.id + ' — ' + c.issue;
+    document.getElementById('m-body').innerHTML =
+      '<p style="font-size:.82rem;color:var(--text-muted);margin-bottom:.75rem">Student: <strong style="color:var(--text-primary)">'+c.user+'</strong> &middot; '+c.date+'</p>'+
+      '<h4 style="font-size:.82rem;font-weight:700;margin-bottom:.75rem">Resolution Timeline</h4>'+
+      '<div style="position:relative;padding-left:1.25rem;border-left:2px solid var(--border)">'+
+      c.tl.map(function(t){return '<div style="margin-bottom:.65rem;font-size:.8rem"><strong style="color:var(--accent-secondary)">'+t.t+':</strong> <span style="color:var(--text-secondary)">'+t.e+'</span></div>';}).join('')+
+      '</div>';
+    document.getElementById('c-modal').classList.add('open');
+  };
+
+  // FEEDBACK JOURNEYS
+  var FBS = [
+    {user:'Riya Kapoor',email:'riya@example.com',date:'Mar 15, 2024',issue:'Course player does not remember progress when switching devices',votes:847,status:'shipped',steps:[
+      {icon:'&#128172;',done:true,title:'Submitted',date:'Mar 15, 2024',desc:'Reported cross-device progress sync issue.'},
+      {icon:'&#128202;',done:true,title:'Analysed',date:'Mar 18, 2024',desc:'Matched with 847 similar reports. Prioritised P1.'},
+      {icon:'&#128736;',done:true,title:'In Development',date:'Apr 2, 2024',desc:'Engineering started cross-device sync.'},
+      {icon:'&#128640;',done:true,title:'Shipped',date:'Apr 20, 2024',desc:'v2.4.0 released. User notified + 1mo Pro reward.'},
+      {icon:'&#127942;',done:true,title:'Impact Measured',date:'Jan 2025',desc:'Completion rate 61% to 85%. 12,400 students benefited.'},
+    ]},
+    {user:'Aditya Sharma',email:'aditya@example.com',date:'Nov 10, 2024',issue:'No dark mode for the design library',votes:312,status:'progress',steps:[
+      {icon:'&#128172;',done:true,title:'Submitted',date:'Nov 10, 2024',desc:'Requested dark mode for design library.'},
+      {icon:'&#128202;',done:true,title:'Analysed',date:'Nov 14, 2024',desc:'312 upvotes. Added to Q1 2025 roadmap.'},
+      {icon:'&#128736;',done:false,title:'In Development',date:'Feb 2025',desc:'UI team started implementation.'},
+      {icon:'&#128640;',done:false,title:'Shipping Soon',date:'Mar 2025',desc:'Expected in v2.6.0.'},
+    ]},
+    {user:'Meera Joshi',email:'meera@example.com',date:'Oct 5, 2024',issue:'Add quiz retake option after failing',votes:198,status:'planned',steps:[
+      {icon:'&#128172;',done:true,title:'Submitted',date:'Oct 5, 2024',desc:'Requested ability to retake failed quizzes.'},
+      {icon:'&#128202;',done:true,title:'Analysed',date:'Oct 9, 2024',desc:'198 upvotes. Scheduled for Q2 2025.'},
+      {icon:'&#128736;',done:false,title:'Planned',date:'Q2 2025',desc:'Not yet started.'},
+    ]},
+  ];
+  var fsc={shipped:'sb-ok',progress:'sb-warn',planned:'sb-pro'};
+  document.getElementById('fb-list').innerHTML=FBS.map(function(f){
+    return '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);padding:1.5rem;margin-bottom:1.5rem">'+
+      '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.75rem">'+
+        '<div><div style="font-weight:700;font-size:.9rem;margin-bottom:.2rem">'+f.issue+'</div>'+
+        '<div style="font-size:.75rem;color:var(--text-muted)">'+f.user+' ('+f.email+') &middot; '+f.date+' &middot; &#128077; '+f.votes+' votes</div></div>'+
+        '<span class="sb '+fsc[f.status]+'">'+f.status+'</span>'+
+      '</div>'+
+      '<div class="fj-wrap"><div class="fj-line"></div>'+
+      f.steps.map(function(s){
+        return '<div class="fj-item"><div class="fj-dot '+(s.done?'done':'')+'">'+s.icon+'</div>'+
+          '<div class="fj-body"><div class="fj-title">'+s.title+'</div><div class="fj-date">'+s.date+'</div><div class="fj-desc">'+s.desc+'</div></div></div>';
+      }).join('')+
+      '</div></div>';
+  }).join('');
+
+  // REFERRALS
+  var REFS=[
+    {ref:'Riya Kapoor',code:'RIYAK2025',referred:'Aditya Sharma',plan:'Pro',date:'Jan 2025',reward:'&#8377;200',status:'paid'},
+    {ref:'Aditya Sharma',code:'ADITS2025',referred:'Meera Joshi',plan:'Pro',date:'Dec 2024',reward:'&#8377;200',status:'paid'},
+    {ref:'Karan Patel',code:'KARANP2025',referred:'Sneha Gupta',plan:'Team',date:'Dec 2024',reward:'&#8377;500',status:'paid'},
+    {ref:'Ananya Singh',code:'ANANS2025',referred:'Dev Mehta',plan:'Pro',date:'Nov 2024',reward:'&#8377;200',status:'pending'},
+    {ref:'Vikram Nair',code:'VIKRN2025',referred:'Rohit Kumar',plan:'Free',date:'Nov 2024',reward:'&#8377;0',status:'pending'},
+    {ref:'Priya Reddy',code:'PRIYR2025',referred:'Karan Patel',plan:'Team',date:'Oct 2024',reward:'&#8377;500',status:'paid'},
+  ];
+  document.getElementById('r-tbody').innerHTML=REFS.map(function(r){
+    var rs=r.status==='paid'?'sb-ok':'sb-warn';
+    return '<tr><td>'+r.ref+'</td><td style="font-family:monospace;font-size:.72rem;color:var(--accent-secondary)">'+r.code+'</td><td>'+r.referred+'</td><td><span class="sb '+pc[r.plan]+'">'+r.plan+'</span></td><td>'+r.date+'</td><td style="color:#10b981;font-weight:600">'+r.reward+'</td><td><span class="sb '+rs+'">'+r.status+'</span></td></tr>';
+  }).join('');
+
+  // REVIEWS
+  var REVIEWS=[
+    {i:'RK',n:'Riya Kapoor',course:'UI/UX Fundamentals',rating:5,text:'Life-changing. Landed a UI/UX role in 6 months.',date:'2 weeks ago',status:'published'},
+    {i:'AS',n:'Aditya Sharma',course:'Graphic Design Bootcamp',rating:5,text:'Best design course online.',date:'1 month ago',status:'published'},
+    {i:'MJ',n:'Meera Joshi',course:'Color Theory Masterclass',rating:4,text:'Excellent content. More advanced projects needed.',date:'1 month ago',status:'published'},
+    {i:'KP',n:'Karan Patel',course:'Design Patterns & Systems',rating:5,text:'Certificate helped me get a 40% salary hike.',date:'2 months ago',status:'published'},
+    {i:'VN',n:'Vikram Nair',course:'UI/UX Fundamentals',rating:3,text:'Good content but videos could be shorter.',date:'3 months ago',status:'flagged'},
+  ];
+  document.getElementById('rv-tbody').innerHTML=REVIEWS.map(function(r){
+    var rs=r.status==='published'?'sb-ok':'sb-err';
+    return '<tr><td><span class="uav">'+r.i+'</span>'+r.n+'</td><td>'+r.course+'</td><td style="color:var(--accent-gold)">'+'&#9733;'.repeat(r.rating)+'</td><td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+r.text+'</td><td>'+r.date+'</td><td><span class="sb '+rs+'">'+r.status+'</span></td></tr>';
+  }).join('');
+});
+</script>
+</body>
+</html>

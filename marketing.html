@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Partners & Sponsors - DesignVerse</title>
+  <link rel="stylesheet" href="css/main.css"/>
+  <style>
+    body{padding-top:70px}
+    .brands-ticker{background:var(--bg-secondary);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:1rem 0;overflow:hidden;position:relative}
+    .brands-ticker::before,.brands-ticker::after{content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2}
+    .brands-ticker::before{left:0;background:linear-gradient(to right,var(--bg-secondary),transparent)}
+    .brands-ticker::after{right:0;background:linear-gradient(to left,var(--bg-secondary),transparent)}
+    .ticker-track{display:flex;gap:3rem;animation:ticker 30s linear infinite;width:max-content}
+    .ticker-track:hover{animation-play-state:paused}
+    @keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    .ticker-brand{display:flex;align-items:center;gap:.6rem;padding:.4rem 1.25rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);white-space:nowrap;font-size:.875rem;font-weight:600;color:var(--text-secondary);transition:var(--transition)}
+    .ticker-brand:hover{border-color:var(--accent-primary);color:var(--text-primary)}
+    .ticker-brand .brand-icon{font-size:1.25rem}
+    .ad-banner{border-radius:var(--radius-xl);overflow:hidden;margin-bottom:2rem;position:relative;cursor:pointer;transition:var(--transition)}
+    .ad-banner:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+    .ad-banner-inner{padding:2.5rem 3rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+    .ad-label{position:absolute;top:.75rem;right:.75rem;font-size:.65rem;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em;background:rgba(0,0,0,.2);padding:.15rem .5rem;border-radius:4px}
+    .ad-text h3{font-size:1.35rem;font-weight:800;margin-bottom:.4rem}
+    .ad-text p{font-size:.875rem;opacity:.85;line-height:1.5;max-width:420px}
+    .ad-cta{padding:.65rem 1.5rem;border-radius:var(--radius-md);font-size:.875rem;font-weight:700;cursor:pointer;border:none;white-space:nowrap;transition:var(--transition)}
+    .ad-cta:hover{opacity:.9;transform:translateY(-1px)}
+    .partner-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-bottom:3rem}
+    .partner-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);padding:2rem;text-align:center;transition:var(--transition);cursor:pointer}
+    .partner-card:hover{border-color:var(--accent-primary);transform:translateY(-3px);box-shadow:var(--shadow-glow)}
+    .partner-logo{font-size:3rem;margin-bottom:1rem}
+    .partner-name{font-size:1.05rem;font-weight:800;margin-bottom:.35rem}
+    .partner-desc{font-size:.82rem;color:var(--text-secondary);line-height:1.6;margin-bottom:1rem}
+    .partner-offer{display:inline-block;padding:.3rem .85rem;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);border-radius:100px;font-size:.75rem;font-weight:700;color:#10b981}
+    @media(max-width:1024px){.partner-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:640px){.partner-grid{grid-template-columns:1fr}.ad-banner-inner{flex-direction:column;text-align:center}}
+  </style>
+</head>
+<body>
+<header class="navbar" id="navbar"></header>
+<div class="mobile-menu" id="mobile-menu"></div>
+
+<div class="page-hero">
+  <div class="container">
+    <h1>Our <span style="background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Partners & Sponsors</span></h1>
+    <p>Trusted by the world's leading design tools and companies. Exclusive offers for DesignVerse learners.</p>
+  </div>
+</div>
+
+<!-- Scrolling brand ticker -->
+<div class="brands-ticker">
+  <div class="ticker-track" id="ticker-track"></div>
+</div>
+
+<div class="section">
+  <div class="container">
+
+    <!-- Featured Ad Banners -->
+    <div class="section-header animate-on-scroll">
+      <div class="section-tag">Exclusive Deals</div>
+      <h2 class="section-title">Special Offers for <span>DesignVerse Learners</span></h2>
+      <p class="section-subtitle">Our partners have put together exclusive deals just for you.</p>
+    </div>
+
+    <div id="ad-banners"></div>
+
+    <!-- Partner Cards -->
+    <div class="section-header animate-on-scroll" style="margin-top:3rem">
+      <div class="section-tag">Trusted Partners</div>
+      <h2 class="section-title">Tools Used by <span>Top Designers</span></h2>
+    </div>
+    <div class="partner-grid" id="partner-grid"></div>
+
+    <!-- Bottom CTA banner -->
+    <div class="ad-banner animate-on-scroll" style="background:linear-gradient(135deg,#1a0a2e,#0a1a2e)" onclick="showToast('Opening partner page...','info')">
+      <div class="ad-label">Sponsored</div>
+      <div class="ad-banner-inner">
+        <div class="ad-text" style="color:#fff">
+          <h3>Want to advertise on DesignVerse?</h3>
+          <p style="color:rgba(255,255,255,.7)">Reach 50,000+ active design learners. Sponsored placements, email campaigns, and co-branded courses available.</p>
+        </div>
+        <button class="ad-cta" style="background:#fff;color:#1a0a2e" onclick="event.stopPropagation();window.location.href='contact.html'">Partner With Us</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="footer" id="footer"></footer>
+<script src="js/components.js"></script>
+<script src="js/main.js"></script>
+<script>
+  var BRANDS = [
+    {icon:'&#128396;',name:'Figma'},{icon:'&#127775;',name:'Adobe XD'},{icon:'&#127775;',name:'Adobe Illustrator'},
+    {icon:'&#127775;',name:'Canva'},{icon:'&#128188;',name:'LinkedIn'},{icon:'&#127979;',name:'NASSCOM'},
+    {icon:'&#128247;',name:'Unsplash'},{icon:'&#128736;',name:'Webflow'},{icon:'&#128640;',name:'Framer'},
+    {icon:'&#127912;',name:'Procreate'},{icon:'&#128202;',name:'Mixpanel'},{icon:'&#128241;',name:'InVision'},
+  ];
+  // Duplicate for seamless loop
+  var allBrands = [...BRANDS, ...BRANDS];
+  document.getElementById('ticker-track').innerHTML = allBrands.map(function(b){
+    return '<div class="ticker-brand"><span class="brand-icon">'+b.icon+'</span>'+b.name+'</div>';
+  }).join('');
+
+  var ADS = [
+    {bg:'linear-gradient(135deg,#1a0533,#0d1a3a)',icon:'&#128396;',brand:'Figma',headline:'Get Figma Pro Free for 3 Months',sub:'Exclusively for DesignVerse Pro subscribers. Start designing with the industry\'s #1 tool — no credit card needed.',cta:'Claim Offer',ctaBg:'#7c3aed',ctaColor:'#fff'},
+    {bg:'linear-gradient(135deg,#1a0a00,#1a1500)',icon:'&#127775;',brand:'Adobe Creative Cloud',headline:'50% Off Adobe Creative Cloud',sub:'DesignVerse learners get half-price access to Photoshop, Illustrator, XD, and 20+ more apps for 6 months.',cta:'Get 50% Off',ctaBg:'#f59e0b',ctaColor:'#000'},
+    {bg:'linear-gradient(135deg,#001a0d,#001a1a)',icon:'&#127775;',brand:'Canva Pro',headline:'Canva Pro — 2 Months Free',sub:'Unlock premium templates, brand kits, and the background remover. Perfect for graphic design students.',cta:'Start Free',ctaBg:'#10b981',ctaColor:'#fff'},
+  ];
+  document.getElementById('ad-banners').innerHTML = ADS.map(function(a){
+    return '<div class="ad-banner animate-on-scroll" style="background:'+a.bg+'" onclick="showToast(\'Opening '+a.brand+' offer...\',\'success\')">' +
+      '<div class="ad-label">Sponsored</div>' +
+      '<div class="ad-banner-inner">' +
+        '<div class="ad-text" style="color:#fff">' +
+          '<div style="font-size:.75rem;font-weight:700;opacity:.6;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem">'+a.brand+'</div>' +
+          '<h3>'+a.headline+'</h3>' +
+          '<p style="color:rgba(255,255,255,.75)">'+a.sub+'</p>' +
+        '</div>' +
+        '<button class="ad-cta" style="background:'+a.ctaBg+';color:'+a.ctaColor+'" onclick="event.stopPropagation();showToast(\'Redirecting to '+a.brand+'...\',\'success\')">'+a.cta+' &#8594;</button>' +
+      '</div></div>';
+  }).join('');
+
+  var PARTNERS = [
+    {icon:'&#128396;',name:'Figma',desc:'The collaborative design tool used by 4M+ designers worldwide. All DesignVerse UI/UX courses are built on Figma.',offer:'3 months Pro free'},
+    {icon:'&#127775;',name:'Adobe Creative Cloud',desc:'Industry-standard suite including Photoshop, Illustrator, After Effects, and XD. Essential for graphic designers.',offer:'50% off for 6 months'},
+    {icon:'&#127775;',name:'Canva',desc:'The easiest way to design anything. Perfect for social media, presentations, and brand materials.',offer:'2 months Pro free'},
+    {icon:'&#128736;',name:'Webflow',desc:'Build professional websites without code. Ideal for designers who want to bring their designs to life.',offer:'1 month free'},
+    {icon:'&#128640;',name:'Framer',desc:'The modern way to build interactive prototypes and production-ready websites with design-first workflow.',offer:'30-day free trial'},
+    {icon:'&#127979;',name:'NASSCOM',desc:'NASSCOM-recognised certificates from DesignVerse are accepted by 500+ companies across India.',offer:'Recognised certification'},
+  ];
+  document.getElementById('partner-grid').innerHTML = PARTNERS.map(function(p){
+    return '<div class="partner-card animate-on-scroll" onclick="showToast(\'Opening '+p.name+' partner page...\',\'info\')">' +
+      '<div class="partner-logo">'+p.icon+'</div>' +
+      '<div class="partner-name">'+p.name+'</div>' +
+      '<div class="partner-desc">'+p.desc+'</div>' +
+      '<span class="partner-offer">&#127381; '+p.offer+'</span>' +
+      '</div>';
+  }).join('');
+</script>
+</body>
+</html>

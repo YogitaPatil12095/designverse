@@ -1,0 +1,276 @@
+﻿﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Courses - DesignVerse</title>
+  <link rel="stylesheet" href="css/main.css"/>
+  <style>
+    body{padding-top:70px}
+    .courses-layout{display:grid;grid-template-columns:260px 1fr;gap:2.5rem;padding:3rem 0}
+    .filters-panel{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;height:fit-content;position:sticky;top:90px}
+    .filter-title{font-size:.82rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:.75rem;margin-top:1.25rem}
+    .filter-title:first-child{margin-top:0}
+    .filter-option{display:flex;align-items:center;gap:.6rem;padding:.35rem 0;cursor:pointer}
+    .filter-option input{accent-color:var(--accent-primary);width:15px;height:15px;cursor:pointer}
+    .filter-option label{font-size:.875rem;color:var(--text-secondary);cursor:pointer;user-select:none}
+    .filter-option label:hover{color:var(--text-primary)}
+    .filter-divider{height:1px;background:var(--border);margin:.75rem 0}
+    .price-range{display:flex;gap:.5rem;align-items:center}
+    .price-input{width:80px;padding:.4rem .6rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-size:.82rem}
+    .price-input:focus{outline:none;border-color:var(--accent-primary)}
+    .btn-apply{width:100%;margin-top:1.25rem;padding:.65rem;background:var(--gradient-primary);border:none;border-radius:var(--radius-md);color:#fff;font-weight:600;cursor:pointer;transition:var(--transition)}
+    .btn-apply:hover{opacity:.9}
+    .btn-reset{width:100%;margin-top:.5rem;padding:.55rem;background:transparent;border:1px solid var(--border);border-radius:var(--radius-md);color:var(--text-muted);font-size:.82rem;cursor:pointer;transition:var(--transition)}
+    .btn-reset:hover{border-color:var(--accent-primary);color:var(--text-primary)}
+    .courses-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:.75rem}
+    .courses-count{font-size:.875rem;color:var(--text-muted)}
+    .courses-sort{padding:.5rem 1rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-size:.875rem;cursor:pointer}
+    .search-bar{display:flex;gap:.75rem;margin-bottom:1.25rem}
+    .search-input{flex:1;padding:.7rem 1rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);color:var(--text-primary);font-size:.9rem}
+    .search-input:focus{outline:none;border-color:var(--accent-primary)}
+    .search-input::placeholder{color:var(--text-muted)}
+    .cat-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.25rem}
+    .cat-tab{padding:.4rem 1rem;border-radius:100px;border:1px solid var(--border);background:transparent;color:var(--text-secondary);font-size:.82rem;font-weight:500;cursor:pointer;transition:var(--transition)}
+    .cat-tab:hover,.cat-tab.active{background:rgba(124,58,237,.15);border-color:var(--accent-primary);color:var(--accent-secondary)}
+    .page-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:1.5rem}
+    .page-tab{padding:.75rem 1.5rem;font-size:.9rem;font-weight:600;color:var(--text-muted);border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;transition:var(--transition);margin-bottom:-1px}
+    .page-tab.active{color:var(--accent-secondary);border-bottom-color:var(--accent-primary)}
+    .courses-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+    .enrolled-progress-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;display:flex;gap:1rem;align-items:flex-start;transition:var(--transition);cursor:pointer;margin-bottom:1rem}
+    .enrolled-progress-card:hover{border-color:var(--accent-primary);transform:translateY(-2px)}
+    .ep-thumb{width:56px;height:56px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:1.75rem;flex-shrink:0}
+    .ep-info{flex:1;min-width:0}
+    .ep-title{font-size:.95rem;font-weight:700;margin-bottom:.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .ep-instructor{font-size:.75rem;color:var(--text-muted);margin-bottom:.6rem}
+    .ep-prog-label{display:flex;justify-content:space-between;font-size:.75rem;color:var(--text-secondary);margin-bottom:.3rem}
+    .ep-continue{margin-top:.6rem;padding:.35rem .85rem;background:var(--gradient-primary);border:none;border-radius:var(--radius-sm);color:#fff;font-size:.78rem;font-weight:600;cursor:pointer}
+    .no-results{grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-muted);font-size:.95rem}
+    @media(max-width:1200px){.courses-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:1024px){.courses-layout{grid-template-columns:1fr}.filters-panel{display:none}}
+    @media(max-width:640px){.courses-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<header class="navbar" id="navbar"></header>
+<div class="mobile-menu" id="mobile-menu"></div>
+
+<div class="page-hero">
+  <div class="container">
+    <h1>Explore <span style="background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent">All Courses</span></h1>
+    <p>200+ expert-led courses across UI/UX, Graphic Design, Design Patterns &amp; Art Styles.</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="courses-layout">
+    <!-- Filters Sidebar -->
+    <aside class="filters-panel">
+      <div class="filter-title">Category</div>
+      <div class="filter-option"><input type="checkbox" id="f-uiux" checked onchange="applyFilters()"/><label for="f-uiux">UI/UX Design (48)</label></div>
+      <div class="filter-option"><input type="checkbox" id="f-graphic" checked onchange="applyFilters()"/><label for="f-graphic">Graphic Design (62)</label></div>
+      <div class="filter-option"><input type="checkbox" id="f-pattern" checked onchange="applyFilters()"/><label for="f-pattern">Design Patterns (35)</label></div>
+      <div class="filter-option"><input type="checkbox" id="f-art" checked onchange="applyFilters()"/><label for="f-art">Art Styles (29)</label></div>
+      <div class="filter-divider"></div>
+      <div class="filter-title">Level</div>
+      <div class="filter-option"><input type="checkbox" id="f-beg" checked onchange="applyFilters()"/><label for="f-beg">Beginner</label></div>
+      <div class="filter-option"><input type="checkbox" id="f-int" checked onchange="applyFilters()"/><label for="f-int">Intermediate</label></div>
+      <div class="filter-option"><input type="checkbox" id="f-adv" checked onchange="applyFilters()"/><label for="f-adv">Advanced</label></div>
+      <div class="filter-divider"></div>
+      <div class="filter-title">Price Range (&#8377;)</div>
+      <div class="price-range">
+        <input class="price-input" type="number" id="price-min" value="0" min="0" oninput="applyFilters()"/>
+        <span style="color:var(--text-muted)">&#8211;</span>
+        <input class="price-input" type="number" id="price-max" value="5000" min="0" oninput="applyFilters()"/>
+      </div>
+      <div class="filter-divider"></div>
+      <div class="filter-title">Rating</div>
+      <div class="filter-option"><input type="radio" name="rating" id="r-any" value="0" checked onchange="applyFilters()"/><label for="r-any">Any Rating</label></div>
+      <div class="filter-option"><input type="radio" name="rating" id="r-4" value="4" onchange="applyFilters()"/><label for="r-4">4&#9733; &amp; above</label></div>
+      <div class="filter-option"><input type="radio" name="rating" id="r-45" value="4.5" onchange="applyFilters()"/><label for="r-45">4.5&#9733; &amp; above</label></div>
+      <button class="btn-reset" onclick="resetFilters()">&#8635; Reset Filters</button>
+    </aside>
+
+    <!-- Main Content -->
+    <div>
+      <div class="page-tabs">
+        <button class="page-tab active" onclick="switchPageTab('all',this)">All Courses</button>
+        <button class="page-tab" onclick="switchPageTab('mycourses',this)" id="my-courses-tab">My Courses</button>
+      </div>
+
+      <!-- All Courses Panel -->
+      <div id="panel-all">
+        <div class="search-bar">
+          <input class="search-input" id="search-input" type="text" placeholder="&#128269;  Search courses, instructors..." oninput="applyFilters()"/>
+        </div>
+        <div class="cat-tabs">
+          <button class="cat-tab active" onclick="setCat('all',this)">All</button>
+          <button class="cat-tab" onclick="setCat('uiux',this)">UI/UX</button>
+          <button class="cat-tab" onclick="setCat('graphic',this)">Graphic</button>
+          <button class="cat-tab" onclick="setCat('pattern',this)">Patterns</button>
+          <button class="cat-tab" onclick="setCat('art',this)">Art Styles</button>
+        </div>
+        <div class="courses-header">
+          <span class="courses-count" id="courses-count">Showing 8 courses</span>
+          <select class="courses-sort" id="sort-select" onchange="applyFilters()">
+            <option value="popular">Most Popular</option>
+            <option value="rating">Highest Rated</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+          </select>
+        </div>
+        <div class="courses-grid" id="courses-grid"></div>
+      </div>
+
+      <!-- My Courses Panel -->
+      <div id="panel-mycourses" style="display:none">
+        <div id="my-courses-content"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer" id="footer"></footer>
+<script src="js/components.js"></script>
+<script src="js/main.js"></script>
+<script>
+  var activeCat = 'all';
+
+  // Check URL param
+  var urlCat = new URLSearchParams(window.location.search).get('cat');
+  if (urlCat) {
+    activeCat = urlCat;
+    document.querySelectorAll('.cat-tab').forEach(function(t) {
+      var matches = (urlCat==='uiux'&&t.textContent.includes('UI')) || (urlCat==='graphic'&&t.textContent.includes('Graphic')) || (urlCat==='pattern'&&t.textContent.includes('Pattern')) || (urlCat==='art'&&t.textContent.includes('Art'));
+      t.classList.toggle('active', matches || (urlCat==='all'&&t.textContent==='All'));
+    });
+  }
+
+  function setCat(cat, btn) {
+    activeCat = cat;
+    document.querySelectorAll('.cat-tab').forEach(function(t){t.classList.remove('active');});
+    btn.classList.add('active');
+    applyFilters();
+  }
+
+  function applyFilters() {
+    var q = (document.getElementById('search-input').value || '').toLowerCase();
+    var cats = {
+      uiux: document.getElementById('f-uiux').checked,
+      graphic: document.getElementById('f-graphic').checked,
+      pattern: document.getElementById('f-pattern').checked,
+      art: document.getElementById('f-art').checked
+    };
+    var levels = {
+      Beginner: document.getElementById('f-beg').checked,
+      Intermediate: document.getElementById('f-int').checked,
+      Advanced: document.getElementById('f-adv').checked
+    };
+    var minPrice = parseInt(document.getElementById('price-min').value) || 0;
+    var maxPrice = parseInt(document.getElementById('price-max').value) || 99999;
+    var minRating = parseFloat(document.querySelector('input[name="rating"]:checked').value) || 0;
+    var sortVal = document.getElementById('sort-select').value;
+
+    var filtered = COURSES.filter(function(c) {
+      var matchCat = activeCat === 'all' ? cats[c.category] : (c.category === activeCat && cats[c.category]);
+      var matchLevel = levels[c.level];
+      var matchPrice = c.price >= minPrice && c.price <= maxPrice;
+      var matchRating = c.rating >= minRating;
+      var matchQ = !q || c.title.toLowerCase().includes(q) || c.instructor.toLowerCase().includes(q);
+      return matchCat && matchLevel && matchPrice && matchRating && matchQ;
+    });
+
+    if (sortVal === 'rating') filtered.sort(function(a,b){return b.rating-a.rating;});
+    else if (sortVal === 'price-low') filtered.sort(function(a,b){return a.price-b.price;});
+    else if (sortVal === 'price-high') filtered.sort(function(a,b){return b.price-a.price;});
+    else filtered.sort(function(a,b){return b.reviews-a.reviews;});
+
+    document.getElementById('courses-count').textContent = 'Showing ' + filtered.length + ' course' + (filtered.length!==1?'s':'');
+    document.getElementById('courses-grid').innerHTML = filtered.length
+      ? filtered.map(function(c){return renderCourseCard(c);}).join('')
+      : '<div class="no-results">&#128269; No courses match your filters. <button onclick="resetFilters()" style="color:var(--accent-secondary);background:none;border:none;cursor:pointer;font-size:.95rem">Reset filters</button></div>';
+  }
+
+  function resetFilters() {
+    document.getElementById('f-uiux').checked = true;
+    document.getElementById('f-graphic').checked = true;
+    document.getElementById('f-pattern').checked = true;
+    document.getElementById('f-art').checked = true;
+    document.getElementById('f-beg').checked = true;
+    document.getElementById('f-int').checked = true;
+    document.getElementById('f-adv').checked = true;
+    document.getElementById('price-min').value = 0;
+    document.getElementById('price-max').value = 5000;
+    document.getElementById('r-any').checked = true;
+    document.getElementById('search-input').value = '';
+    activeCat = 'all';
+    document.querySelectorAll('.cat-tab').forEach(function(t,i){t.classList.toggle('active',i===0);});
+    applyFilters();
+    showToast('Filters reset', 'info');
+  }
+
+  function switchPageTab(tab, btn) {
+    document.querySelectorAll('.page-tab').forEach(function(t){t.classList.remove('active');});
+    btn.classList.add('active');
+    document.getElementById('panel-all').style.display = tab === 'all' ? 'block' : 'none';
+    document.getElementById('panel-mycourses').style.display = tab === 'mycourses' ? 'block' : 'none';
+    if (tab === 'mycourses') renderMyCourses();
+  }
+
+  function renderMyCourses() {
+    var stored = Enrolled.get();
+
+    // Seed demo enrollments for demo user if nothing enrolled yet
+    if (stored.length === 0 && Auth.isLoggedIn()) {
+      var DEMO_ENROLL = [
+        { id:1, title:'UI/UX Design Fundamentals', instructor:'Priya Sharma', emoji:'&#127912;', bg:'rgba(124,58,237,0.2)', progress:68, duration:'24h', level:'Beginner', category:'uiux', tag:'UI/UX', tagClass:'tag-uiux', price:999, original:2999, rating:4.9, reviews:2341, students:'12.4k' },
+        { id:8, title:'Color Theory Masterclass', instructor:'Vikram Joshi', emoji:'&#127752;', bg:'rgba(6,182,212,0.2)', progress:91, duration:'10h', level:'Beginner', category:'art', tag:'Art Styles', tagClass:'tag-art', price:499, original:999, rating:4.9, reviews:4521, students:'22.1k' },
+        { id:3, title:'Graphic Design Bootcamp', instructor:'Sneha Patel', emoji:'&#128444;', bg:'rgba(236,72,153,0.2)', progress:42, duration:'18h', level:'Beginner', category:'graphic', tag:'Graphic', tagClass:'tag-graphic', price:799, original:1999, rating:4.7, reviews:3102, students:'15.2k' },
+      ];
+      DEMO_ENROLL.forEach(function(c) { Enrolled.add(c); });
+      stored = Enrolled.get();
+    }
+
+    var el = document.getElementById('my-courses-content');
+
+    if (stored.length === 0) {
+      el.innerHTML = '<div style="text-align:center;padding:3rem;color:var(--text-muted)">' +
+        '<div style="font-size:3rem;margin-bottom:1rem">&#128218;</div>' +
+        '<p style="font-size:.95rem;margin-bottom:1rem">You have not enrolled in any courses yet.</p>' +
+        '<a href="#" onclick="switchPageTab(\'all\',document.querySelector(\'.page-tab\'))" class="btn btn-primary btn-sm">Browse Courses</a>' +
+        '</div>';
+      return;
+    }
+
+    // Map stored enrollments to full course data from COURSES array
+    var myCourses = stored.map(function(s) {
+      var full = COURSES.find(function(c){ return c.id === s.id; });
+      if (!full) return null;
+      return Object.assign({}, full, {
+        progress: s.progress || 0,
+        bg: s.bg || 'rgba(124,58,237,0.2)',
+        enrolledAt: s.enrolledAt
+      });
+    }).filter(Boolean);
+
+    el.innerHTML =
+      '<h3 style="font-size:1rem;font-weight:700;margin-bottom:1.25rem;color:var(--text-secondary)">&#128218; ' + myCourses.length + ' Course' + (myCourses.length !== 1 ? 's' : '') + ' Enrolled</h3>' +
+      myCourses.map(function(c) {
+        var bgMap = {uiux:'rgba(124,58,237,0.2)',graphic:'rgba(236,72,153,0.2)',pattern:'rgba(6,182,212,0.2)',art:'rgba(245,158,11,0.2)'};
+        var bg = bgMap[c.category] || 'rgba(124,58,237,0.2)';
+        return '<div class="enrolled-progress-card" onclick="window.location.href=\'course-detail.html?id='+c.id+'\'">' +
+          '<div class="ep-thumb" style="background:'+bg+'">'+c.emoji+'</div>' +
+          '<div class="ep-info">' +
+            '<div class="ep-title">'+c.title+'</div>' +
+            '<div class="ep-instructor">&#128100; '+c.instructor+' &middot; &#9201; '+c.duration+'</div>' +
+            '<div class="ep-prog-label"><span>Progress</span><span>'+c.progress+'%</span></div>' +
+            '<div class="progress-bar"><div class="progress-fill" style="width:'+c.progress+'%"></div></div>' +
+            '<button class="ep-continue" onclick="event.stopPropagation();showToast(\'Resuming...\',\'info\')">'+(c.progress===100?'&#128257; Review':'&#9654; Continue')+'</button>' +
+          '</div></div>';
+      }).join('');
+  }
+  // Initial render
+  applyFilters();
+</script>
+</body>
+</html>
