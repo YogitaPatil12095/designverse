@@ -1,28 +1,29 @@
-???<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login / Sign Up – DesignVerse</title>
+  <title>Login / Sign Up - DesignVerse</title>
   <link rel="stylesheet" href="css/main.css" />
   <style>
     body { display: flex; min-height: 100vh; }
     .auth-left {
-      flex: 1; background: linear-gradient(135deg, #1a0a2e, #0a0a1f);
+      flex: 1;
+      background: linear-gradient(135deg, #0F0F1A 0%, #1A1A2E 60%, #2a0a1e 100%);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       padding: 3rem; position: relative; overflow: hidden;
     }
     .auth-left::before {
       content: ''; position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 30% 50%, rgba(124,58,237,0.3) 0%, transparent 60%);
+      background: radial-gradient(ellipse at 30% 50%, rgba(233,69,96,0.2) 0%, transparent 60%);
     }
     .auth-left-content { position: relative; z-index: 1; text-align: center; max-width: 420px; }
     .auth-logo { font-size: 2rem; font-weight: 800; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 2rem; display: block; }
-    .auth-left h2 { font-size: 2.25rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.2; }
+    .auth-left h2 { font-size: 2.25rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.2; color: #F5F0EB; }
     .auth-left p { color: var(--text-secondary); line-height: 1.7; margin-bottom: 2rem; }
     .auth-features { display: flex; flex-direction: column; gap: 0.75rem; text-align: left; }
     .auth-feature { display: flex; align-items: center; gap: 0.75rem; font-size: 0.9rem; color: var(--text-secondary); }
-    .auth-feature span:first-child { font-size: 1.1rem; }
+    .auth-feature .feat-icon { width: 28px; height: 28px; border-radius: 50%; background: rgba(233,69,96,0.15); border: 1px solid rgba(233,69,96,0.3); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0; color: var(--accent-secondary); font-weight: 700; }
     .auth-right {
       width: 480px; background: var(--bg-secondary);
       display: flex; align-items: center; justify-content: center;
@@ -36,6 +37,7 @@
       font-size: 0.9rem; font-weight: 600;
       cursor: pointer; transition: var(--transition);
       color: var(--text-muted); border: none; background: transparent;
+      font-family: var(--font-body);
     }
     .auth-tab.active { background: var(--gradient-primary); color: #fff; }
     .form-group { margin-bottom: 1.25rem; }
@@ -45,15 +47,16 @@
       background: var(--bg-card); border: 1px solid var(--border);
       border-radius: var(--radius-md); color: var(--text-primary);
       font-size: 0.95rem; transition: var(--transition);
+      font-family: var(--font-body);
     }
-    .form-input:focus { outline: none; border-color: var(--accent-primary); box-shadow: 0 0 0 3px rgba(124,58,237,0.15); }
+    .form-input:focus { outline: none; border-color: var(--accent-primary); box-shadow: 0 0 0 3px rgba(233,69,96,0.15); }
     .form-input::placeholder { color: var(--text-muted); }
     .input-wrap { position: relative; }
     .input-wrap .form-input { padding-right: 3rem; }
     .toggle-pw {
       position: absolute; right: 1rem; top: 50%; transform: translateY(-50%);
-      cursor: pointer; font-size: 1.1rem; color: var(--text-muted);
-      background: none; border: none; transition: var(--transition);
+      cursor: pointer; font-size: 1rem; color: var(--text-muted);
+      background: none; border: none; transition: var(--transition); line-height: 1;
     }
     .toggle-pw:hover { color: var(--text-primary); }
     .form-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
@@ -68,28 +71,38 @@
       border-radius: var(--radius-md); color: #fff;
       font-size: 1rem; font-weight: 700;
       cursor: pointer; transition: var(--transition);
-      box-shadow: 0 0 20px rgba(124,58,237,0.3);
+      box-shadow: 0 0 20px rgba(233,69,96,0.3);
+      font-family: var(--font-body);
     }
-    .btn-auth:hover { transform: translateY(-2px); box-shadow: 0 0 35px rgba(124,58,237,0.5); }
+    .btn-auth:hover { transform: translateY(-2px); box-shadow: 0 0 35px rgba(233,69,96,0.5); }
     .divider { display: flex; align-items: center; gap: 1rem; margin: 1.5rem 0; }
     .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
     .divider span { font-size: 0.8rem; color: var(--text-muted); }
     .demo-box {
-      background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.3);
-      border-radius: var(--radius-md); padding: 1rem 1.25rem; margin-bottom: 1.5rem;
+      background: rgba(233,69,96,0.08); border: 1px solid rgba(233,69,96,0.25);
+      border-radius: var(--radius-md); padding: 1rem 1.25rem; margin-bottom: 1rem;
     }
     .demo-box h4 { font-size: 0.85rem; font-weight: 700; color: var(--accent-secondary); margin-bottom: 0.5rem; }
     .demo-box p { font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.25rem; }
-    .demo-box code { color: var(--accent-cyan); font-family: monospace; }
+    .demo-box code { color: #FF6B7A; font-family: monospace; }
     .demo-fill-btn {
       margin-top: 0.75rem; padding: 0.4rem 0.85rem;
-      background: rgba(124,58,237,0.2); border: 1px solid rgba(124,58,237,0.4);
+      background: rgba(233,69,96,0.15); border: 1px solid rgba(233,69,96,0.35);
       border-radius: var(--radius-sm); color: var(--accent-secondary);
       font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: var(--transition);
+      font-family: var(--font-body);
     }
-    .demo-fill-btn:hover { background: rgba(124,58,237,0.35); }
+    .demo-fill-btn:hover { background: rgba(233,69,96,0.3); }
+    .demo-box.admin-box { background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.25); }
     .form-error { color: #ef4444; font-size: 0.8rem; margin-top: 0.35rem; display: none; }
     .form-error.show { display: block; }
+    .social-btn {
+      padding: 0.7rem; background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-md); color: var(--text-primary);
+      font-size: 0.875rem; font-weight: 600; cursor: pointer;
+      transition: var(--transition); font-family: var(--font-body);
+    }
+    .social-btn:hover { border-color: var(--accent-primary); background: rgba(233,69,96,0.08); }
     @media (max-width: 900px) { .auth-left { display: none; } .auth-right { width: 100%; } }
   </style>
 </head>
@@ -101,11 +114,11 @@
     <h2>Start Your Design Journey Today</h2>
     <p>Join 50,000+ designers learning UI/UX, Graphic Design, and Art Styles from India's top instructors.</p>
     <div class="auth-features">
-      <div class="auth-feature"><span>??</span><span>200+ expert-led courses</span></div>
-      <div class="auth-feature"><span>??</span><span>Industry-recognized certificates</span></div>
-      <div class="auth-feature"><span>??</span><span>Learn at your own pace, anywhere</span></div>
-      <div class="auth-feature"><span>??</span><span>Community of 50,000+ designers</span></div>
-      <div class="auth-feature"><span>??</span><span>Lifetime access to all content</span></div>
+      <div class="auth-feature"><div class="feat-icon">&#10003;</div><span>200+ expert-led courses</span></div>
+      <div class="auth-feature"><div class="feat-icon">&#10003;</div><span>Industry-recognized certificates</span></div>
+      <div class="auth-feature"><div class="feat-icon">&#10003;</div><span>Learn at your own pace, anywhere</span></div>
+      <div class="auth-feature"><div class="feat-icon">&#10003;</div><span>Community of 50,000+ designers</span></div>
+      <div class="auth-feature"><div class="feat-icon">&#10003;</div><span>Lifetime access to all content</span></div>
     </div>
   </div>
 </div>
@@ -113,7 +126,7 @@
 <div class="auth-right">
   <div class="auth-form-wrap">
     <div style="margin-bottom:2rem">
-      <h2 style="font-size:1.75rem;font-weight:800;margin-bottom:0.5rem">Welcome Back ??</h2>
+      <h2 style="font-size:1.75rem;font-weight:800;margin-bottom:0.5rem">Welcome Back</h2>
       <p style="color:var(--text-secondary);font-size:0.9rem">Sign in to continue your design journey</p>
     </div>
 
@@ -122,14 +135,13 @@
       <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
     </div>
 
-    <!-- Demo credentials box -->
     <div class="demo-box">
       <h4>&#127891; Student Login</h4>
       <p>Email: <code>student@designverse.com</code></p>
       <p>Password: <code>123456</code></p>
       <button class="demo-fill-btn" onclick="fillDemo('student')">Auto-fill Student</button>
     </div>
-    <div class="demo-box" style="background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.3);margin-top:0.75rem">
+    <div class="demo-box admin-box">
       <h4 style="color:var(--accent-gold)">&#128272; Admin Login</h4>
       <p>Email: <code style="color:var(--accent-gold)">admin@designverse.com</code></p>
       <p>Password: <code style="color:var(--accent-gold)">admin123</code></p>
@@ -137,7 +149,7 @@
     </div>
 
     <!-- Login Form -->
-    <form id="login-form" onsubmit="handleLogin(event)">
+    <form id="login-form" onsubmit="handleLogin(event)" style="margin-top:1.25rem">
       <div class="form-group">
         <label class="form-label">Email Address</label>
         <input type="email" id="login-email" class="form-input" placeholder="you@example.com" required />
@@ -147,7 +159,7 @@
         <label class="form-label">Password</label>
         <div class="input-wrap">
           <input type="password" id="login-password" class="form-input" placeholder="Enter your password" required />
-          <button type="button" class="toggle-pw" onclick="togglePw('login-password', this)">???</button>
+          <button type="button" class="toggle-pw" onclick="togglePw('login-password',this)" title="Show/hide password">&#128065;</button>
         </div>
         <div class="form-error" id="login-pw-err">Invalid email or password.</div>
       </div>
@@ -158,11 +170,11 @@
         </label>
         <a href="#" class="forgot-link">Forgot password?</a>
       </div>
-      <button type="submit" class="btn-auth">Sign In ?</button>
+      <button type="submit" class="btn-auth">Sign In</button>
     </form>
 
     <!-- Signup Form -->
-    <form id="signup-form" style="display:none" onsubmit="handleSignup(event)">
+    <form id="signup-form" style="display:none;margin-top:1.25rem" onsubmit="handleSignup(event)">
       <div class="form-group">
         <label class="form-label">Full Name</label>
         <input type="text" id="signup-name" class="form-input" placeholder="Your full name" required />
@@ -175,30 +187,31 @@
         <label class="form-label">Password</label>
         <div class="input-wrap">
           <input type="password" id="signup-password" class="form-input" placeholder="Min. 6 characters" required />
-          <button type="button" class="toggle-pw" onclick="togglePw('signup-password', this)">???</button>
+          <button type="button" class="toggle-pw" onclick="togglePw('signup-password',this)" title="Show/hide password">&#128065;</button>
         </div>
       </div>
       <div class="form-group">
         <label class="form-label">Confirm Password</label>
         <div class="input-wrap">
           <input type="password" id="signup-confirm" class="form-input" placeholder="Repeat password" required />
-          <button type="button" class="toggle-pw" onclick="togglePw('signup-confirm', this)">???</button>
+          <button type="button" class="toggle-pw" onclick="togglePw('signup-confirm',this)" title="Show/hide password">&#128065;</button>
         </div>
         <div class="form-error" id="signup-pw-err">Passwords do not match.</div>
       </div>
-      <button type="submit" class="btn-auth">Create Account ?</button>
+      <button type="submit" class="btn-auth">Create Account</button>
     </form>
 
     <div class="divider"><span>or continue with</span></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem">
-      <button onclick="showToast('Google login coming soon!','info')" style="padding:0.7rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);color:var(--text-primary);font-size:0.875rem;font-weight:600;cursor:pointer;transition:var(--transition)" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border)'">?? Google</button>
-      <button onclick="showToast('GitHub login coming soon!','info')" style="padding:0.7rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);color:var(--text-primary);font-size:0.875rem;font-weight:600;cursor:pointer;transition:var(--transition)" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border)'">? GitHub</button>
+      <button class="social-btn" onclick="showToast('Google login coming soon!','info')">&#127758; Google</button>
+      <button class="social-btn" onclick="showToast('GitHub login coming soon!','info')">&#128025; GitHub</button>
     </div>
   </div>
 </div>
 
 <script src="js/components.js"></script>
 <script src="js/main.js"></script>
+<script src="js/ads.js"></script>
 <script>
   if (Auth.isLoggedIn()) {
     window.location.href = Auth.isAdmin() ? 'admin.html' : 'dashboard.html';
@@ -207,57 +220,57 @@
     document.querySelectorAll('.auth-tab').forEach(function(t,i){
       t.classList.toggle('active',(i===0&&tab==='login')||(i===1&&tab==='signup'));
     });
-    document.getElementById('login-form').style.display=tab==='login'?'block':'none';
-    document.getElementById('signup-form').style.display=tab==='signup'?'block':'none';
+    document.getElementById('login-form').style.display = tab==='login' ? 'block' : 'none';
+    document.getElementById('signup-form').style.display = tab==='signup' ? 'block' : 'none';
   }
-  function togglePw(id,btn){
-    var input=document.getElementById(id);
-    if(input.type==='password'){input.type='text';btn.textContent='??';}
-    else{input.type='password';btn.textContent='???';}
+  function togglePw(id, btn) {
+    var input = document.getElementById(id);
+    if (input.type === 'password') { input.type = 'text'; btn.innerHTML = '&#128683;'; }
+    else { input.type = 'password'; btn.innerHTML = '&#128065;'; }
   }
-  function fillDemo(role){
-    if(role==='admin'){
-      document.getElementById('login-email').value='admin@designverse.com';
-      document.getElementById('login-password').value='admin123';
-    }else{
-      document.getElementById('login-email').value='student@designverse.com';
-      document.getElementById('login-password').value='123456';
+  function fillDemo(role) {
+    if (role === 'admin') {
+      document.getElementById('login-email').value = 'admin@designverse.com';
+      document.getElementById('login-password').value = 'admin123';
+    } else {
+      document.getElementById('login-email').value = 'student@designverse.com';
+      document.getElementById('login-password').value = '123456';
     }
-    showToast('Credentials filled!','success');
+    showToast('Credentials filled!', 'success');
   }
-  function handleLogin(e){
+  function handleLogin(e) {
     e.preventDefault();
-    var email=document.getElementById('login-email').value.trim();
-    var password=document.getElementById('login-password').value;
-    var errEl=document.getElementById('login-pw-err');
-    var validUsers=[
-      {email:'student@designverse.com',password:'123456',name:'Design Student',role:'user'},
-      {email:'admin@designverse.com',password:'admin123',name:'Admin',role:'admin'}
+    var email = document.getElementById('login-email').value.trim();
+    var password = document.getElementById('login-password').value;
+    var errEl = document.getElementById('login-pw-err');
+    var validUsers = [
+      {email:'student@designverse.com', password:'123456', name:'Design Student', role:'user'},
+      {email:'admin@designverse.com', password:'admin123', name:'Admin', role:'admin'}
     ];
-    var savedUsers=JSON.parse(localStorage.getItem('dv_users')||'[]');
-    var user=validUsers.concat(savedUsers).find(function(u){return u.email===email&&u.password===password;});
-    if(!user){errEl.classList.add('show');return;}
+    var savedUsers = JSON.parse(localStorage.getItem('dv_users') || '[]');
+    var user = validUsers.concat(savedUsers).find(function(u){ return u.email===email && u.password===password; });
+    if (!user) { errEl.classList.add('show'); return; }
     errEl.classList.remove('show');
-    Auth.login(email,user.name||email.split('@')[0],user.role||'user');
-    showToast('Welcome back! Redirecting...','success');
-    setTimeout(function(){window.location.href=user.role==='admin'?'admin.html':'dashboard.html';},1200);
+    Auth.login(email, user.name || email.split('@')[0], user.role || 'user');
+    showToast('Welcome back! Redirecting...', 'success');
+    setTimeout(function(){ window.location.href = user.role==='admin' ? 'admin.html' : 'dashboard.html'; }, 1200);
   }
-  function handleSignup(e){
+  function handleSignup(e) {
     e.preventDefault();
-    var name=document.getElementById('signup-name').value.trim();
-    var email=document.getElementById('signup-email').value.trim();
-    var pw=document.getElementById('signup-password').value;
-    var confirm=document.getElementById('signup-confirm').value;
-    var errEl=document.getElementById('signup-pw-err');
-    if(pw!==confirm){errEl.classList.add('show');return;}
-    if(pw.length<6){errEl.textContent='Password must be at least 6 characters.';errEl.classList.add('show');return;}
+    var name = document.getElementById('signup-name').value.trim();
+    var email = document.getElementById('signup-email').value.trim();
+    var pw = document.getElementById('signup-password').value;
+    var confirm = document.getElementById('signup-confirm').value;
+    var errEl = document.getElementById('signup-pw-err');
+    if (pw !== confirm) { errEl.classList.add('show'); return; }
+    if (pw.length < 6) { errEl.textContent = 'Password must be at least 6 characters.'; errEl.classList.add('show'); return; }
     errEl.classList.remove('show');
-    var users=JSON.parse(localStorage.getItem('dv_users')||'[]');
-    users.push({email:email,password:pw,name:name,role:'user'});
-    localStorage.setItem('dv_users',JSON.stringify(users));
-    Auth.login(email,name,'user');
-    showToast('Account created! Welcome to DesignVerse!','success');
-    setTimeout(function(){window.location.href='dashboard.html';},1200);
+    var users = JSON.parse(localStorage.getItem('dv_users') || '[]');
+    users.push({email:email, password:pw, name:name, role:'user'});
+    localStorage.setItem('dv_users', JSON.stringify(users));
+    Auth.login(email, name, 'user');
+    showToast('Account created! Welcome to DesignVerse!', 'success');
+    setTimeout(function(){ window.location.href = 'dashboard.html'; }, 1200);
   }
 </script>
 </body>
