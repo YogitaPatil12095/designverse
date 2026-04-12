@@ -10,6 +10,7 @@ function renderNavbar() {
       <a href="courses.html">Courses</a>
       <a href="design-library.html">Library</a>
       <a href="artists.html">Artists</a>
+      <a href="community.html">Community</a>
       <a href="revenue.html">Pricing</a>
       <a href="contact.html">Contact</a>
     </nav>
@@ -31,6 +32,7 @@ function renderMobileMenu() {
     <a href="courses.html">Courses</a>
     <a href="design-library.html">Library</a>
     <a href="artists.html">Artists</a>
+    <a href="community.html">Community</a>
     <a href="revenue.html">Pricing</a>
     <a href="contact.html">Contact</a>
     <a href="auth.html">Login / Sign Up</a>
@@ -60,6 +62,7 @@ function renderFooter() {
             <li><a href="courses.html">All Courses</a></li>
             <li><a href="design-library.html">Design Library</a></li>
             <li><a href="artists.html">Artists</a></li>
+            <li><a href="community.html">Community</a></li>
             <li><a href="dashboard.html">Dashboard</a></li>
           </ul>
         </div>

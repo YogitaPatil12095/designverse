@@ -1,5 +1,51 @@
 // DesignVerse - Home Page JS
 
+// ================================
+// Promo Banner Typewriter
+// ================================
+(function() {
+  var messages = [
+    '🎨  LIMITED OFFER — 70% OFF on all UI/UX courses this week only!',
+    '🚀  NEW: Advanced Figma Mastery course just launched — Enroll now!',
+    '🏆  Join 50,000+ designers. Get certified. Get hired.',
+    '✨  FREE workshop this Saturday — Design Systems from Scratch. Register today!',
+    '💜  Use code DESIGNVERSE at checkout for an extra 10% off!'
+  ];
+  var msgIndex = 0;
+  var charIndex = 0;
+  var el = document.getElementById('promo-text');
+  if (!el) return;
+
+  function typeMessage() {
+    el.innerHTML = '';
+    charIndex = 0;
+    var msg = messages[msgIndex];
+
+    function typeChar() {
+      if (charIndex >= msg.length) {
+        // pause then move to next message
+        setTimeout(function() {
+          msgIndex = (msgIndex + 1) % messages.length;
+          typeMessage();
+        }, 3000);
+        return;
+      }
+      var span = document.createElement('span');
+      span.className = 'promo-char';
+      span.style.animationDelay = '0s';
+      span.textContent = msg[charIndex] === ' ' ? '\u00A0' : msg[charIndex];
+      el.appendChild(span);
+      charIndex++;
+      setTimeout(typeChar, msg[charIndex - 1] === ' ' ? 40 : 55);
+    }
+    typeChar();
+  }
+
+  // Start after loading screen hides
+  setTimeout(typeMessage, 1600);
+})();
+
+
 // Render featured courses (first 4)
 const featuredEl = document.getElementById('featured-courses');
 if (featuredEl) {

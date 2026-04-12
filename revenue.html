@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
@@ -169,7 +169,7 @@
     <!-- CTA -->
     <div style="text-align:center;margin-top:4rem;background:linear-gradient(135deg,#1a0a2e,#0a0a1f);border:1px solid var(--border);border-radius:var(--radius-xl);padding:3rem">
       <h2 style="font-size:1.75rem;font-weight:800;margin-bottom:1rem">Still not sure?</h2>
-      <p style="color:var(--text-secondary);margin-bottom:2rem">Start free — no credit card required. Upgrade when you are ready.</p>
+      <p style="color:var(--text-secondary);margin-bottom:2rem">Start free � no credit card required. Upgrade when you are ready.</p>
       <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
         <a href="auth.html" class="btn btn-primary btn-lg">Start Free Today</a>
         <a href="contact.html" class="btn btn-outline btn-lg">Talk to Us</a>
@@ -203,7 +203,7 @@
       description: 'DesignVerse Pro Subscription' + (isAnnual ? ' (Annual)' : ' (Monthly)')
     }, function(response) {
       Subscription.set('pro');
-      document.getElementById('pro-btn').textContent = '✅ Pro Active';
+      document.getElementById('pro-btn').textContent = '? Pro Active';
       document.getElementById('pro-btn').style.background = 'rgba(16,185,129,0.2)';
       showToast('Welcome to Pro! Access all courses now.', 'success');
       setTimeout(() => window.location.href = 'dashboard.html', 1500);
@@ -212,7 +212,7 @@
 
   // Check subscription on load
   if (Subscription.isPro()) {
-    document.getElementById('pro-btn').textContent = '✅ Pro Active';
+    document.getElementById('pro-btn').textContent = '? Pro Active';
     document.getElementById('pro-btn').style.background = 'rgba(16,185,129,0.2)';
   }
   var FAQS = [

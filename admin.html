@@ -104,6 +104,7 @@
       <div class="nav-sep"></div>
       <div class="admin-logo">Strategy</div>
       <a onclick="showSec('marketing',this)">&#128227; Marketing</a>
+      <a onclick="showSec('advertisements',this)">&#128248; Advertisements</a>
       <a onclick="showSec('security',this)">&#128274; Security</a>
     </nav>
   </aside>
@@ -369,7 +370,94 @@
       </div>
     </div>
 
+    <!-- ADVERTISEMENTS -->
+    <div class="admin-section" id="sec-advertisements">
+      <div class="admin-header">
+        <div class="admin-title">&#128248; Advertisements</div>
+        <button class="btn btn-primary btn-sm" onclick="openAdForm(null)">+ New Ad</button>
+      </div>
+      <div class="kpi-grid" id="ads-kpis"></div>
+      <div class="tw">
+        <div class="tw-header"><span class="tw-title">All Ads</span></div>
+        <table class="at">
+          <thead><tr><th>Ad</th><th>Targeting</th><th>Priority</th><th>Schedule</th><th>Impressions</th><th>Clicks</th><th>CTR</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="ads-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
   </main>
+</div>
+
+<!-- Ad Form Modal -->
+<div class="modal-overlay" id="ad-form-modal">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-hdr">
+      <h3 id="ad-form-title" style="font-size:1rem;font-weight:700">New Ad</h3>
+      <button class="modal-close" onclick="document.getElementById('ad-form-modal').classList.remove('open')">&#10005;</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <input type="hidden" id="af-id" />
+      <div>
+        <label style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.35rem">Title</label>
+        <input id="af-title" type="text" placeholder="Ad headline" style="width:100%;padding:.6rem .9rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:var(--font-body);font-size:.875rem" />
+      </div>
+      <div>
+        <label style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.35rem">Body Text</label>
+        <textarea id="af-body" rows="2" placeholder="Ad description" style="width:100%;padding:.6rem .9rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:var(--font-body);font-size:.875rem;resize:vertical"></textarea>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+        <div>
+          <label style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.35rem">CTA Label</label>
+          <input id="af-cta" type="text" placeholder="e.g. Enroll Now" style="width:100%;padding:.6rem .9rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:var(--font-body);font-size:.875rem" />
+        </div>
+        <div>
+          <label style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.35rem">CTA URL</label>
+          <input id="af-url" type="text" placeholder="courses.html" style="width:100%;padding:.6rem .9rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:var(--font-body);font-size:.875rem" />
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem">
+        <div>
+          <label style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.35rem">Emoji / Icon</label>
+          <input id="af-image" type="text" placeholder="🎨" style="width:100%;padding:.6rem .9rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:var(--font-body);font-size:.875rem" />
+        </div>
+        <div>
+          <label style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.35rem">Priority (1–10)</label>
+          <input id="af-priority" type="number" min="1" max="10" placeholder="5" style="width:100%;padding:.6rem .9rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:var(--font-body);font-size:.875rem" />
+        </div>
+        <div>
+          <label style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.35rem">Targeting</label>
+          <select id="af-targeting" style="width:100%;padding:.6rem .9rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:var(--font-body);font-size:.875rem">
+            <option value="all">All</option>
+            <option value="guest">Guest only</option>
+            <option value="signed_in">Signed in only</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+        <div>
+          <label style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.35rem">Start Date</label>
+          <input id="af-start" type="date" style="width:100%;padding:.6rem .9rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:var(--font-body);font-size:.875rem" />
+        </div>
+        <div>
+          <label style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.35rem">End Date</label>
+          <input id="af-end" type="date" style="width:100%;padding:.6rem .9rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:var(--font-body);font-size:.875rem" />
+        </div>
+      </div>
+      <div>
+        <label style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.35rem">Background (CSS gradient or color)</label>
+        <input id="af-bg" type="text" placeholder="linear-gradient(135deg,#E94560,#FF6B7A)" style="width:100%;padding:.6rem .9rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:var(--font-body);font-size:.875rem" />
+      </div>
+      <div style="display:flex;align-items:center;gap:.6rem">
+        <input type="checkbox" id="af-active" checked style="width:16px;height:16px;accent-color:var(--accent-primary)" />
+        <label for="af-active" style="font-size:.875rem">Active</label>
+      </div>
+      <div style="display:flex;gap:.75rem;justify-content:flex-end;margin-top:.5rem">
+        <button onclick="document.getElementById('ad-form-modal').classList.remove('open')" style="padding:.55rem 1.25rem;background:transparent;border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-secondary);cursor:pointer;font-family:var(--font-body)">Cancel</button>
+        <button onclick="saveAd()" class="btn btn-primary btn-sm">Save Ad</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Complaint Modal -->
@@ -381,6 +469,7 @@
 </div>
 
 <script src="js/main.js"></script>
+<script src="js/ads.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   if (!Auth.isLoggedIn() || !Auth.isAdmin()) {
@@ -758,6 +847,118 @@ document.addEventListener('DOMContentLoaded', function() {
     var rs=r.status==='published'?'sb-ok':'sb-err';
     return '<tr><td><span class="uav">'+r.i+'</span>'+r.n+'</td><td>'+r.course+'</td><td style="color:var(--accent-gold)">'+'&#9733;'.repeat(r.rating)+'</td><td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+r.text+'</td><td>'+r.date+'</td><td><span class="sb '+rs+'">'+r.status+'</span></td></tr>';
   }).join('');
+});
+</script>
+
+<script>
+// ---- Ads Admin Manager ----
+function renderAdsAdmin() {
+  var ads = AdsEngine.loadAds();
+  var totalImpressions = ads.reduce(function(s,a){return s+a.impressionCount;},0);
+  var totalClicks = ads.reduce(function(s,a){return s+a.clickCount;},0);
+  var active = ads.filter(function(a){return a.active;}).length;
+  var ctr = totalImpressions ? ((totalClicks/totalImpressions)*100).toFixed(2) : '0.00';
+
+  document.getElementById('ads-kpis').innerHTML =
+    '<div class="kpi"><div class="kpi-val">'+ads.length+'</div><div class="kpi-label">Total Ads</div></div>'+
+    '<div class="kpi"><div class="kpi-val" style="color:#10b981">'+active+'</div><div class="kpi-label">Active</div></div>'+
+    '<div class="kpi"><div class="kpi-val">'+totalImpressions.toLocaleString()+'</div><div class="kpi-label">Total Impressions</div></div>'+
+    '<div class="kpi"><div class="kpi-val">'+ctr+'%</div><div class="kpi-label">Overall CTR</div></div>';
+
+  document.getElementById('ads-tbody').innerHTML = ads.map(function(ad) {
+    var ctr = ad.impressionCount ? ((ad.clickCount/ad.impressionCount)*100).toFixed(1)+'%' : '—';
+    var status = ad.active ? '<span class="sb sb-ok">Active</span>' : '<span class="sb sb-muted">Inactive</span>';
+    return '<tr>'+
+      '<td><span style="font-size:1.2rem;margin-right:.4rem">'+ad.image+'</span><strong>'+ad.title+'</strong><div style="font-size:.72rem;color:var(--text-muted);margin-top:.15rem">'+ad.body.slice(0,50)+'…</div></td>'+
+      '<td><span class="sb sb-cyan">'+ad.targeting+'</span></td>'+
+      '<td><strong>'+ad.priority+'</strong>/10</td>'+
+      '<td style="font-size:.75rem">'+ad.startDate+'<br>→ '+ad.endDate+'</td>'+
+      '<td>'+ad.impressionCount.toLocaleString()+'</td>'+
+      '<td>'+ad.clickCount.toLocaleString()+'</td>'+
+      '<td>'+ctr+'</td>'+
+      '<td>'+status+'</td>'+
+      '<td style="white-space:nowrap">'+
+        '<button onclick="toggleAd(\''+ad.id+'\')" style="padding:.25rem .6rem;border-radius:var(--radius-sm);border:1px solid var(--border);background:transparent;color:var(--text-secondary);cursor:pointer;font-size:.75rem;margin-right:.3rem">'+(ad.active?'Pause':'Activate')+'</button>'+
+        '<button onclick="openAdForm(\''+ad.id+'\')" style="padding:.25rem .6rem;border-radius:var(--radius-sm);border:1px solid var(--accent-primary);background:transparent;color:var(--accent-secondary);cursor:pointer;font-size:.75rem;margin-right:.3rem">Edit</button>'+
+        '<button onclick="deleteAd(\''+ad.id+'\')" style="padding:.25rem .6rem;border-radius:var(--radius-sm);border:1px solid rgba(239,68,68,.3);background:transparent;color:#ef4444;cursor:pointer;font-size:.75rem">Delete</button>'+
+      '</td>'+
+    '</tr>';
+  }).join('');
+}
+
+function openAdForm(id) {
+  var ads = AdsEngine.loadAds();
+  var ad = id ? ads.find(function(a){return a.id===id;}) : null;
+  document.getElementById('ad-form-title').textContent = ad ? 'Edit Ad' : 'New Ad';
+  document.getElementById('af-id').value = ad ? ad.id : '';
+  document.getElementById('af-title').value = ad ? ad.title : '';
+  document.getElementById('af-body').value = ad ? ad.body : '';
+  document.getElementById('af-cta').value = ad ? ad.cta : '';
+  document.getElementById('af-url').value = ad ? ad.ctaUrl : '';
+  document.getElementById('af-image').value = ad ? ad.image : '🎨';
+  document.getElementById('af-priority').value = ad ? ad.priority : 5;
+  document.getElementById('af-targeting').value = ad ? ad.targeting : 'all';
+  document.getElementById('af-start').value = ad ? ad.startDate : '';
+  document.getElementById('af-end').value = ad ? ad.endDate : '';
+  document.getElementById('af-bg').value = ad ? ad.bg : '';
+  document.getElementById('af-active').checked = ad ? ad.active : true;
+  document.getElementById('ad-form-modal').classList.add('open');
+}
+
+function saveAd() {
+  var ads = AdsEngine.loadAds();
+  var id = document.getElementById('af-id').value;
+  var data = {
+    id: id || 'ad_' + Date.now(),
+    title: document.getElementById('af-title').value,
+    body: document.getElementById('af-body').value,
+    cta: document.getElementById('af-cta').value,
+    ctaUrl: document.getElementById('af-url').value,
+    image: document.getElementById('af-image').value || '🎨',
+    priority: parseInt(document.getElementById('af-priority').value) || 5,
+    targeting: document.getElementById('af-targeting').value,
+    startDate: document.getElementById('af-start').value,
+    endDate: document.getElementById('af-end').value,
+    bg: document.getElementById('af-bg').value || 'var(--bg-card)',
+    active: document.getElementById('af-active').checked,
+    impressionCount: 0, clickCount: 0
+  };
+  if (id) {
+    var existing = ads.find(function(a){return a.id===id;});
+    if (existing) { data.impressionCount = existing.impressionCount; data.clickCount = existing.clickCount; }
+    ads = ads.map(function(a){return a.id===id ? data : a;});
+  } else {
+    ads.push(data);
+  }
+  AdsEngine.saveAds(ads);
+  document.getElementById('ad-form-modal').classList.remove('open');
+  renderAdsAdmin();
+  if (typeof showToast === 'function') showToast('Ad saved!', 'success');
+}
+
+function toggleAd(id) {
+  var ads = AdsEngine.loadAds();
+  ads = ads.map(function(a){return a.id===id ? Object.assign({},a,{active:!a.active}) : a;});
+  AdsEngine.saveAds(ads);
+  renderAdsAdmin();
+}
+
+function deleteAd(id) {
+  if (!confirm('Delete this ad?')) return;
+  var ads = AdsEngine.loadAds().filter(function(a){return a.id!==id;});
+  AdsEngine.saveAds(ads);
+  renderAdsAdmin();
+  if (typeof showToast === 'function') showToast('Ad deleted', 'info');
+}
+
+// Hook into showSec to render ads when section opens
+var _origShowSec = window.showSec;
+document.addEventListener('DOMContentLoaded', function() {
+  var origShowSec = window.showSec;
+  window.showSec = function(id, el) {
+    origShowSec(id, el);
+    if (id === 'advertisements') renderAdsAdmin();
+  };
 });
 </script>
 </body>

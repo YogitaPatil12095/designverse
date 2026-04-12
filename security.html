@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Privacy & Terms - DesignVerse</title>
+  <title>Privacy, Terms & Security - DesignVerse</title>
   <link rel="stylesheet" href="css/main.css"/>
   <style>
     body{padding-top:70px}
@@ -23,6 +23,41 @@
     .right-item strong{font-size:.82rem;color:var(--text-primary)}
     .last-updated{font-size:.78rem;color:var(--text-muted);margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border)}
     @media(max-width:640px){.rights-grid{grid-template-columns:1fr 1fr}}
+
+    /* Security extras */
+    .sec-score-ring { position:relative; width:120px; height:120px; margin:0 auto 1rem; }
+    .sec-score-ring svg { transform:rotate(-90deg); }
+    .sec-score-ring .score-val { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:1.6rem; font-weight:800; color:var(--accent-cyan); }
+    .sec-score-ring .score-lbl { font-size:.6rem; color:var(--text-muted); margin-top:.1rem; }
+    .sec-check-row { display:flex; align-items:center; justify-content:space-between; padding:.85rem 0; border-bottom:1px solid var(--border); }
+    .sec-check-row:last-child { border-bottom:none; }
+    .sec-check-left { display:flex; align-items:center; gap:.75rem; }
+    .sec-check-icon { width:36px; height:36px; border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
+    .sec-check-title { font-size:.875rem; font-weight:600; }
+    .sec-check-desc { font-size:.75rem; color:var(--text-muted); margin-top:.1rem; }
+    .sec-toggle { position:relative; width:44px; height:24px; }
+    .sec-toggle input { opacity:0; width:0; height:0; }
+    .sec-toggle-slider { position:absolute; inset:0; background:var(--border); border-radius:12px; cursor:pointer; transition:.3s; }
+    .sec-toggle-slider::before { content:''; position:absolute; width:18px; height:18px; left:3px; top:3px; background:#fff; border-radius:50%; transition:.3s; }
+    .sec-toggle input:checked + .sec-toggle-slider { background:var(--accent-primary); }
+    .sec-toggle input:checked + .sec-toggle-slider::before { transform:translateX(20px); }
+    .session-card { background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius-md); padding:1rem 1.25rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:.75rem; flex-wrap:wrap; }
+    .session-card.current { border-color:var(--accent-cyan); background:rgba(22,160,133,.06); }
+    .session-device { display:flex; align-items:center; gap:.75rem; }
+    .session-icon { font-size:1.5rem; }
+    .session-name { font-size:.875rem; font-weight:600; }
+    .session-meta { font-size:.75rem; color:var(--text-muted); margin-top:.15rem; }
+    .audit-row { display:flex; align-items:flex-start; gap:.85rem; padding:.85rem 0; border-bottom:1px solid var(--border); }
+    .audit-row:last-child { border-bottom:none; }
+    .audit-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; margin-top:.35rem; }
+    .audit-time { font-size:.72rem; color:var(--text-muted); white-space:nowrap; min-width:90px; }
+    .audit-event { font-size:.82rem; font-weight:600; }
+    .audit-detail { font-size:.75rem; color:var(--text-muted); margin-top:.1rem; }
+    .threat-card { background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius-md); padding:1rem 1.25rem; display:flex; align-items:center; gap:1rem; margin-bottom:.75rem; }
+    .threat-level { padding:.2rem .65rem; border-radius:100px; font-size:.7rem; font-weight:700; white-space:nowrap; }
+    .threat-low { background:rgba(16,185,129,.15); color:#10b981; }
+    .threat-med { background:rgba(245,158,11,.15); color:var(--accent-gold); }
+    .threat-high { background:rgba(239,68,68,.15); color:#ef4444; }
   </style>
 </head>
 <body>
@@ -31,16 +66,19 @@
 
 <div class="page-hero">
   <div class="container">
-    <h1>Privacy &amp; <span style="background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Terms</span></h1>
-    <p>How we handle your data and the rules that govern your use of DesignVerse.</p>
+    <h1>Security &amp; <span style="background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Privacy</span></h1>
+    <p>Your account security, data privacy, and platform trust — all in one place.</p>
   </div>
 </div>
 
 <div class="section">
   <div class="container" style="max-width:860px">
-    <div class="sec-tabs">
+    <div class="sec-tabs" style="flex-wrap:wrap">
       <button class="sec-tab active" onclick="switchTab('privacy',this)">&#128274; Privacy Policy</button>
       <button class="sec-tab" onclick="switchTab('terms',this)">&#128203; Terms of Service</button>
+      <button class="sec-tab" onclick="switchTab('security',this)">&#128737; Security Center</button>
+      <button class="sec-tab" onclick="switchTab('sessions',this)">&#128187; Active Sessions</button>
+      <button class="sec-tab" onclick="switchTab('auditlog',this)">&#128196; Audit Log</button>
     </div>
 
     <!-- PRIVACY POLICY -->
@@ -50,8 +88,8 @@
         <ul>
           <li><strong>Account Data:</strong> Name and email address provided at registration.</li>
           <li><strong>Learning Data:</strong> Course progress, quiz scores, certificates earned, and bookmarks.</li>
-          <li><strong>Payment Data:</strong> Transaction IDs only — card details are handled by our PCI-DSS certified payment gateway and never stored by us.</li>
-          <li><strong>Usage Data:</strong> Pages visited, time spent, and device type — used anonymously to improve the platform.</li>
+          <li><strong>Payment Data:</strong> Transaction IDs only � card details are handled by our PCI-DSS certified payment gateway and never stored by us.</li>
+          <li><strong>Usage Data:</strong> Pages visited, time spent, and device type � used anonymously to improve the platform.</li>
           <li><strong>Communications:</strong> Support tickets and feedback you submit to us.</li>
         </ul>
       </div>
@@ -72,10 +110,10 @@
         <h3>&#128257; Data Sharing</h3>
         <p>We <strong>never sell</strong> your personal data. We share data only with:</p>
         <ul style="margin-top:.75rem">
-          <li><strong>Payment processors</strong> (Razorpay) — for transaction processing only</li>
-          <li><strong>Email providers</strong> (SendGrid) — for transactional emails only</li>
-          <li><strong>Analytics tools</strong> — anonymised, aggregated data only</li>
-          <li><strong>Legal authorities</strong> — only when required by applicable law</li>
+          <li><strong>Payment processors</strong> (Razorpay) � for transaction processing only</li>
+          <li><strong>Email providers</strong> (SendGrid) � for transactional emails only</li>
+          <li><strong>Analytics tools</strong> � anonymised, aggregated data only</li>
+          <li><strong>Legal authorities</strong> � only when required by applicable law</li>
         </ul>
       </div>
 
@@ -170,12 +208,159 @@
         <a href="contact.html" class="btn btn-primary">Contact Us</a>
       </div>
     </div>
+
+    <!-- SECURITY CENTER -->
+    <div class="tab-panel" id="tab-security">
+      <div class="policy-card" style="text-align:center">
+        <h3 style="justify-content:center">&#128737; Your Security Score</h3>
+        <div class="sec-score-ring">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="50" fill="none" stroke="var(--border)" stroke-width="10"/>
+            <circle id="score-arc" cx="60" cy="60" r="50" fill="none" stroke="#16A085" stroke-width="10" stroke-dasharray="314" stroke-dashoffset="94" stroke-linecap="round"/>
+          </svg>
+          <div class="score-val"><span id="score-num">70</span><span class="score-lbl">/ 100</span></div>
+        </div>
+        <p style="color:var(--text-muted);font-size:.85rem">Complete the checklist below to reach 100</p>
+      </div>
+
+      <div class="policy-card">
+        <h3>&#9989; Security Checklist</h3>
+        <div class="sec-check-row">
+          <div class="sec-check-left">
+            <div class="sec-check-icon" style="background:rgba(16,185,129,.15)">&#128274;</div>
+            <div><div class="sec-check-title">Strong Password</div><div class="sec-check-desc">Your password meets complexity requirements</div></div>
+          </div>
+          <span class="sb sb-ok">&#10003; Done</span>
+        </div>
+        <div class="sec-check-row">
+          <div class="sec-check-left">
+            <div class="sec-check-icon" style="background:rgba(245,158,11,.15)" id="tfa-icon">&#128241;</div>
+            <div><div class="sec-check-title">Two-Factor Authentication</div><div class="sec-check-desc" id="tfa-desc">Add an extra layer of protection</div></div>
+          </div>
+          <label class="sec-toggle"><input type="checkbox" id="tfa-toggle" onchange="toggleTFA(this)"/><span class="sec-toggle-slider"></span></label>
+        </div>
+        <div class="sec-check-row">
+          <div class="sec-check-left">
+            <div class="sec-check-icon" style="background:rgba(6,182,212,.15)">&#128231;</div>
+            <div><div class="sec-check-title">Email Verified</div><div class="sec-check-desc">Your email address has been confirmed</div></div>
+          </div>
+          <span class="sb sb-ok">&#10003; Done</span>
+        </div>
+        <div class="sec-check-row">
+          <div class="sec-check-left">
+            <div class="sec-check-icon" style="background:rgba(233,69,96,.15)">&#128272;</div>
+            <div><div class="sec-check-title">Recovery Codes</div><div class="sec-check-desc" id="recovery-desc">Save backup codes in case you lose access</div></div>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="generateRecoveryCodes()" id="recovery-btn">Generate</button>
+        </div>
+        <div class="sec-check-row">
+          <div class="sec-check-left">
+            <div class="sec-check-icon" style="background:rgba(124,58,237,.15)">&#128276;</div>
+            <div><div class="sec-check-title">Login Alerts</div><div class="sec-check-desc">Get notified of new sign-ins</div></div>
+          </div>
+          <label class="sec-toggle"><input type="checkbox" id="alert-toggle" checked onchange="showToast(this.checked?'Login alerts enabled':'Login alerts disabled',this.checked?'success':'info')"/><span class="sec-toggle-slider"></span></label>
+        </div>
+        <div class="sec-check-row">
+          <div class="sec-check-left">
+            <div class="sec-check-icon" style="background:rgba(16,185,129,.15)">&#128100;</div>
+            <div><div class="sec-check-title">Profile Visibility</div><div class="sec-check-desc">Control who can see your profile</div></div>
+          </div>
+          <select onchange="showToast('Visibility set to: '+this.value,'success')" style="padding:.35rem .75rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:var(--font-body);font-size:.8rem">
+            <option>Public</option><option selected>Community only</option><option>Private</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="policy-card" id="recovery-panel" style="display:none">
+        <h3>&#128272; Backup Recovery Codes</h3>
+        <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:1rem">Store these safely. Each code can be used once.</p>
+        <div id="recovery-codes-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:.5rem;margin-bottom:1rem;font-family:monospace;font-size:.9rem"></div>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+          <button class="btn btn-outline btn-sm" onclick="copyRecoveryCodes()">&#128203; Copy All</button>
+          <button class="btn btn-outline btn-sm" onclick="generateRecoveryCodes()">&#128260; Regenerate</button>
+        </div>
+      </div>
+
+      <div class="policy-card">
+        <h3>&#128268; Threat Monitor</h3>
+        <div class="threat-card"><span style="font-size:1.4rem">&#9989;</span><div style="flex:1"><div style="font-size:.875rem;font-weight:600">No active threats detected</div><div style="font-size:.75rem;color:var(--text-muted)">Last scan: just now</div></div><span class="threat-level threat-low">LOW RISK</span></div>
+        <div class="threat-card"><span style="font-size:1.4rem">&#128268;</span><div style="flex:1"><div style="font-size:.875rem;font-weight:600">1 unrecognised login location</div><div style="font-size:.75rem;color:var(--text-muted)">Mumbai, MH — 3 days ago · Chrome on Windows</div></div><span class="threat-level threat-med">REVIEW</span></div>
+        <div style="margin-top:1rem;display:flex;gap:.75rem;flex-wrap:wrap">
+          <button class="btn btn-primary btn-sm" onclick="showToast('Account secured!','success')">&#128274; Secure My Account</button>
+          <button class="btn btn-outline btn-sm" onclick="switchTab('sessions',document.querySelectorAll('.sec-tab')[3])">&#128187; View Sessions</button>
+        </div>
+      </div>
+
+      <div class="policy-card">
+        <h3>&#128273; Change Password</h3>
+        <div style="display:flex;flex-direction:column;gap:.85rem;max-width:420px">
+          <div><label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">Current Password</label><input type="password" placeholder="••••••••" style="width:100%;padding:.6rem .9rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:var(--font-body)"/></div>
+          <div>
+            <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">New Password</label>
+            <input type="password" id="new-pw" placeholder="Min 8 chars, 1 number, 1 symbol" oninput="checkPwStrength(this.value)" style="width:100%;padding:.6rem .9rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:var(--font-body)"/>
+            <div style="margin-top:.5rem;height:4px;background:var(--border);border-radius:2px;overflow:hidden"><div id="pw-strength-bar" style="height:100%;width:0;border-radius:2px;transition:width .3s,background .3s"></div></div>
+            <div id="pw-strength-label" style="font-size:.72rem;color:var(--text-muted);margin-top:.25rem"></div>
+          </div>
+          <div><label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">Confirm New Password</label><input type="password" placeholder="••••••••" style="width:100%;padding:.6rem .9rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:var(--font-body)"/></div>
+          <button class="btn btn-primary btn-sm" style="align-self:flex-start" onclick="showToast('Password updated!','success')">Update Password</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIVE SESSIONS -->
+    <div class="tab-panel" id="tab-sessions">
+      <div class="policy-card">
+        <h3>&#128187; Active Sessions</h3>
+        <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:1.25rem">Devices currently signed in. Revoke any you don't recognise.</p>
+        <div class="session-card current">
+          <div class="session-device"><span class="session-icon">&#128187;</span><div><div class="session-name">Chrome on Windows <span style="background:rgba(22,160,133,.15);color:#16A085;font-size:.68rem;padding:.15rem .5rem;border-radius:100px;margin-left:.4rem">Current</span></div><div class="session-meta">Bengaluru, KA · IP 103.21.xx.xx · Active now</div></div></div>
+          <span style="font-size:.75rem;color:var(--text-muted)">This device</span>
+        </div>
+        <div class="session-card" id="session-mumbai">
+          <div class="session-device"><span class="session-icon">&#128241;</span><div><div class="session-name">Safari on iPhone 14</div><div class="session-meta">Mumbai, MH · IP 49.36.xx.xx · 3 days ago</div></div></div>
+          <button class="btn btn-sm" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#ef4444;animation:none" onclick="revokeSession('session-mumbai','Safari on iPhone 14')">Revoke</button>
+        </div>
+        <div class="session-card" id="session-delhi">
+          <div class="session-device"><span class="session-icon">&#128187;</span><div><div class="session-name">Firefox on MacBook Pro</div><div class="session-meta">Delhi, DL · IP 122.15.xx.xx · 1 week ago</div></div></div>
+          <button class="btn btn-sm" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#ef4444;animation:none" onclick="revokeSession('session-delhi','Firefox on MacBook Pro')">Revoke</button>
+        </div>
+        <div style="margin-top:1.25rem">
+          <button class="btn btn-sm" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#ef4444;animation:none" onclick="revokeAllSessions()">&#128683; Revoke All Other Sessions</button>
+        </div>
+      </div>
+      <div class="policy-card">
+        <h3>&#128274; Trusted Devices</h3>
+        <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:1rem">Trusted devices skip 2FA for 30 days.</p>
+        <div class="session-card">
+          <div class="session-device"><span class="session-icon">&#128187;</span><div><div class="session-name">Chrome on Windows</div><div class="session-meta">Trusted Jan 15, 2025 · Expires Feb 14, 2025</div></div></div>
+          <button class="btn btn-outline btn-sm" onclick="showToast('Device removed from trusted list','info')">Remove</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- AUDIT LOG -->
+    <div class="tab-panel" id="tab-auditlog">
+      <div class="policy-card">
+        <h3>&#128196; Security Audit Log</h3>
+        <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:1.25rem">Full record of security-related activity on your account.</p>
+        <div style="display:flex;gap:.5rem;margin-bottom:1.25rem;flex-wrap:wrap" id="audit-filters">
+          <button class="comm-filter active" onclick="filterAudit('all',this)">All</button>
+          <button class="comm-filter" onclick="filterAudit('login',this)">Logins</button>
+          <button class="comm-filter" onclick="filterAudit('settings',this)">Settings</button>
+          <button class="comm-filter" onclick="filterAudit('payment',this)">Payments</button>
+          <button class="comm-filter" onclick="filterAudit('security',this)">Security</button>
+        </div>
+        <div id="audit-log-list"></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
 <footer class="footer" id="footer"></footer>
 <script src="js/components.js"></script>
 <script src="js/main.js"></script>
+<script src="js/ads.js"></script>
 <script>
   function switchTab(tab, btn) {
     document.querySelectorAll('.sec-tab').forEach(function(t){t.classList.remove('active');});
@@ -183,6 +368,139 @@
     btn.classList.add('active');
     document.getElementById('tab-'+tab).classList.add('active');
   }
+
+  // Security score
+  function updateScore() {
+    var score = 70;
+    if (document.getElementById('tfa-toggle').checked) score += 15;
+    if (document.getElementById('recovery-panel').style.display !== 'none') score += 10;
+    if (!document.getElementById('alert-toggle').checked) score -= 5;
+    score = Math.min(100, Math.max(0, score));
+    document.getElementById('score-num').textContent = score;
+    var arc = document.getElementById('score-arc');
+    var offset = 314 - (314 * score / 100);
+    arc.setAttribute('stroke-dashoffset', offset);
+    arc.setAttribute('stroke', score >= 90 ? '#16A085' : score >= 60 ? '#f59e0b' : '#ef4444');
+  }
+
+  // 2FA toggle
+  function toggleTFA(cb) {
+    var desc = document.getElementById('tfa-desc');
+    var icon = document.getElementById('tfa-icon');
+    if (cb.checked) {
+      desc.textContent = '2FA is active — your account is protected';
+      icon.style.background = 'rgba(16,185,129,.15)';
+      icon.textContent = '✅';
+      showToast('Two-factor authentication enabled!', 'success');
+    } else {
+      desc.textContent = 'Add an extra layer of protection';
+      icon.style.background = 'rgba(245,158,11,.15)';
+      icon.textContent = '📱';
+      showToast('2FA disabled', 'info');
+    }
+    updateScore();
+  }
+
+  // Recovery codes
+  function generateRecoveryCodes() {
+    var codes = [];
+    for (var i = 0; i < 8; i++) {
+      codes.push(Math.random().toString(36).substr(2,5).toUpperCase() + '-' + Math.random().toString(36).substr(2,5).toUpperCase());
+    }
+    var grid = document.getElementById('recovery-codes-grid');
+    grid.innerHTML = codes.map(function(c) {
+      return '<div style="background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.4rem .75rem;letter-spacing:.1em;color:var(--text-primary)">' + c + '</div>';
+    }).join('');
+    document.getElementById('recovery-panel').style.display = 'block';
+    document.getElementById('recovery-desc').textContent = '8 codes generated — store them safely';
+    document.getElementById('recovery-btn').textContent = 'Regenerate';
+    window._recoveryCodes = codes;
+    updateScore();
+    showToast('Recovery codes generated!', 'success');
+  }
+
+  function copyRecoveryCodes() {
+    if (window._recoveryCodes) {
+      navigator.clipboard.writeText(window._recoveryCodes.join('\n'));
+      showToast('Codes copied to clipboard!', 'success');
+    }
+  }
+
+  // Password strength
+  function checkPwStrength(val) {
+    var bar = document.getElementById('pw-strength-bar');
+    var lbl = document.getElementById('pw-strength-label');
+    var score = 0;
+    if (val.length >= 8) score++;
+    if (/[A-Z]/.test(val)) score++;
+    if (/[0-9]/.test(val)) score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+    if (val.length >= 12) score++;
+    var levels = [
+      {w:'0%', c:'#ef4444', t:''},
+      {w:'25%', c:'#ef4444', t:'Weak'},
+      {w:'50%', c:'#f59e0b', t:'Fair'},
+      {w:'75%', c:'#16A085', t:'Good'},
+      {w:'100%', c:'#10b981', t:'Strong'}
+    ];
+    var l = levels[Math.min(score, 4)];
+    bar.style.width = l.w; bar.style.background = l.c;
+    lbl.textContent = l.t; lbl.style.color = l.c;
+  }
+
+  // Sessions
+  function revokeSession(id, name) {
+    var el = document.getElementById(id);
+    if (el) { el.style.opacity = '0'; el.style.transition = 'opacity .3s'; setTimeout(function(){el.remove();}, 300); }
+    showToast(name + ' session revoked', 'success');
+  }
+  function revokeAllSessions() {
+    ['session-mumbai','session-delhi'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) { el.style.opacity='0'; el.style.transition='opacity .3s'; setTimeout(function(){el.remove();},300); }
+    });
+    showToast('All other sessions revoked', 'success');
+  }
+
+  // Audit log data
+  var AUDIT_EVENTS = [
+    {type:'login',   dot:'#16A085', event:'Successful login',          detail:'Chrome on Windows · Bengaluru, KA · 103.21.xx.xx', time:'Just now'},
+    {type:'security',dot:'#f59e0b', event:'Unrecognised login attempt', detail:'Safari on iPhone · Mumbai, MH · 49.36.xx.xx',       time:'3 days ago'},
+    {type:'settings',dot:'#E94560', event:'Password changed',           detail:'Via account settings',                              time:'1 week ago'},
+    {type:'login',   dot:'#16A085', event:'Successful login',           detail:'Firefox on MacBook · Delhi, DL · 122.15.xx.xx',     time:'1 week ago'},
+    {type:'payment', dot:'#a855f7', event:'Payment processed',          detail:'Pro subscription · ₹1,499 · Razorpay',             time:'2 weeks ago'},
+    {type:'security',dot:'#f59e0b', event:'Login alert triggered',      detail:'New device detected · Email notification sent',     time:'2 weeks ago'},
+    {type:'settings',dot:'#06b6d4', event:'Email verified',             detail:'Account email confirmed',                           time:'1 month ago'},
+    {type:'login',   dot:'#16A085', event:'Successful login',           detail:'Chrome on Windows · Bengaluru, KA',                 time:'1 month ago'},
+    {type:'security',dot:'#10b981', event:'2FA enabled',                detail:'TOTP authenticator configured',                     time:'1 month ago'},
+    {type:'payment', dot:'#a855f7', event:'Subscription renewed',       detail:'Pro plan · Auto-renewal · ₹1,499',                 time:'2 months ago'},
+    {type:'settings',dot:'#E94560', event:'Profile updated',            detail:'Display name and bio changed',                      time:'2 months ago'},
+    {type:'login',   dot:'#16A085', event:'Account created',            detail:'Registration via email',                            time:'3 months ago'},
+  ];
+
+  function renderAuditLog(filter) {
+    var list = filter === 'all' ? AUDIT_EVENTS : AUDIT_EVENTS.filter(function(e){return e.type===filter;});
+    document.getElementById('audit-log-list').innerHTML = list.map(function(e) {
+      return '<div class="audit-row">' +
+        '<div class="audit-dot" style="background:'+e.dot+'"></div>' +
+        '<div class="audit-time">'+e.time+'</div>' +
+        '<div style="flex:1"><div class="audit-event">'+e.event+'</div><div class="audit-detail">'+e.detail+'</div></div>' +
+        '<span class="sb" style="background:'+e.dot+'22;color:'+e.dot+';white-space:nowrap">'+e.type+'</span>' +
+      '</div>';
+    }).join('');
+  }
+
+  function filterAudit(type, btn) {
+    document.querySelectorAll('#audit-filters .comm-filter').forEach(function(b){b.classList.remove('active');});
+    btn.classList.add('active');
+    renderAuditLog(type);
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    renderAuditLog('all');
+    updateScore();
+    document.getElementById('alert-toggle').addEventListener('change', updateScore);
+  });
 </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
@@ -80,7 +80,7 @@
 <div class="page-hero">
   <div class="container">
     <h1>CRM <span style="background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Dashboard</span></h1>
-    <p>Customer reviews, complaints, referrals, feedback â€” and how we use every data point to improve DesignVerse.</p>
+    <p>Customer reviews, complaints, referrals, feedback — and how we use every data point to improve DesignVerse.</p>
   </div>
 </div>
 <div class="section">
@@ -182,7 +182,7 @@
           <div class="fj-item">
             <div class="fj-dot active">&#127942;</div>
             <div class="fj-content">
-              <div class="fj-title">Impact Measured â€” 10 Months Later</div>
+              <div class="fj-title">Impact Measured — 10 Months Later</div>
               <div class="fj-date">January 2025 &mdash; Analytics Report</div>
               <div class="fj-desc">Course completion rate increased from 61% to 85%. Mobile usage up 34%. Support tickets about progress loss dropped by 94%.</div>
               <div class="fj-improvement">&#128200; Result: 12,400 learners directly benefited. NPS score improved by 18 points. Feature rated 4.9/5 in user surveys.</div>
@@ -195,7 +195,7 @@
     <!-- Data Usage Map -->
     <div class="tab-panel" id="tab-datamap">
       <div class="map-container">
-        <div class="map-title">&#128202; How We Use Your Data â€” Full Transparency Map</div>
+        <div class="map-title">&#128202; How We Use Your Data — Full Transparency Map</div>
         <div class="data-flow">
           <div class="df-node"><div class="icon">&#128100;</div><div class="label">User Submits Data</div></div>
           <div class="df-arrow">&#8594;</div>
@@ -238,8 +238,8 @@ document.getElementById('reviews-list').innerHTML=REVIEWS.map(function(r){
   return '<div class="review-card"><div class="review-header"><div class="rav">'+r.init+'</div><div><div class="rname">'+r.name+' <span class="rtag tag-'+r.tag+'">'+r.tag+'</span></div><div class="rdate">'+r.date+' &middot; '+r.course+'</div></div><div class="rstars" style="margin-left:auto">'+'&#9733;'.repeat(r.stars)+'</div></div><p class="rtext">'+r.text+'</p><div class="r-response"><strong>DesignVerse replied:</strong> '+r.response+'</div></div>';
 }).join('');
 var COMPLAINTS=[
-  {id:'CMP-2025-0041',status:'resolved',title:'Video not loading on mobile Safari',user:'Vikram Nair',date:'Jan 12, 2025',desc:'Course videos fail to load on iPhone 14 Pro using Safari 17. Spinner shows indefinitely. Chrome on same device works fine.',timeline:[{t:'Jan 12',e:'Complaint received and acknowledged'},{ t:'Jan 13',e:'Reproduced on iOS Safari 17 â€” confirmed bug'},{ t:'Jan 14',e:'Fix deployed: HLS stream fallback added for Safari'},{ t:'Jan 15',e:'User confirmed resolved. Ticket closed'}]},
-  {id:'CMP-2025-0038',status:'resolved',title:'Certificate not generating after course completion',user:'Priya Reddy',date:'Jan 8, 2025',desc:'Completed Color Theory Masterclass (100%) but certificate download button is greyed out. Refreshed multiple times, cleared cache â€” still not working.',timeline:[{t:'Jan 8',e:'Complaint received'},{ t:'Jan 9',e:'Database issue found: completion flag not set for batch of 23 users'},{ t:'Jan 9',e:'Hotfix deployed. Certificates generated for all affected users'},{ t:'Jan 10',e:'All 23 users emailed with apology and 1-month Pro extension'}]},
+  {id:'CMP-2025-0041',status:'resolved',title:'Video not loading on mobile Safari',user:'Vikram Nair',date:'Jan 12, 2025',desc:'Course videos fail to load on iPhone 14 Pro using Safari 17. Spinner shows indefinitely. Chrome on same device works fine.',timeline:[{t:'Jan 12',e:'Complaint received and acknowledged'},{ t:'Jan 13',e:'Reproduced on iOS Safari 17 — confirmed bug'},{ t:'Jan 14',e:'Fix deployed: HLS stream fallback added for Safari'},{ t:'Jan 15',e:'User confirmed resolved. Ticket closed'}]},
+  {id:'CMP-2025-0038',status:'resolved',title:'Certificate not generating after course completion',user:'Priya Reddy',date:'Jan 8, 2025',desc:'Completed Color Theory Masterclass (100%) but certificate download button is greyed out. Refreshed multiple times, cleared cache — still not working.',timeline:[{t:'Jan 8',e:'Complaint received'},{ t:'Jan 9',e:'Database issue found: completion flag not set for batch of 23 users'},{ t:'Jan 9',e:'Hotfix deployed. Certificates generated for all affected users'},{ t:'Jan 10',e:'All 23 users emailed with apology and 1-month Pro extension'}]},
   {id:'CMP-2025-0035',status:'progress',title:'Payment deducted but enrollment not confirmed',user:'Rohit Kumar',date:'Jan 5, 2025',desc:'Paid for UI/UX Fundamentals via UPI. Money deducted from account but course shows as not enrolled. Transaction ID: RZP2025010512345.',timeline:[{t:'Jan 5',e:'Complaint received. Payment gateway logs requested'},{ t:'Jan 6',e:'Confirmed payment received. Enrollment webhook failed'},{ t:'Jan 7',e:'Manual enrollment done. Refund of duplicate charge processed'}]},
 ];
 document.getElementById('complaints-list').innerHTML=COMPLAINTS.map(function(c){

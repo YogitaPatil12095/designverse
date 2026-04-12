@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Community – DesignVerse</title>
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/community.css" />
+</head>
+<body>
+
+<header class="navbar" id="navbar"></header>
+<div class="mobile-menu" id="mobile-menu"></div>
+
+<div class="page-hero">
+  <div class="container">
+    <div class="section-tag">👥 Community</div>
+    <h1>Find Your <span style="background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Design Tribe</span></h1>
+    <p>Join groups of designers on the same career path. Share work, ask questions, grow together.</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+
+    <!-- Search & Filter -->
+    <div class="comm-toolbar">
+      <div class="comm-search">
+        <span>🔍</span>
+        <input type="text" id="comm-search" placeholder="Search groups..." />
+      </div>
+      <div class="comm-filters" id="comm-filters">
+        <button class="comm-filter active" data-filter="all">All</button>
+        <button class="comm-filter" data-filter="uiux">UI/UX</button>
+        <button class="comm-filter" data-filter="graphic">Graphic</button>
+        <button class="comm-filter" data-filter="pattern">Design Systems</button>
+        <button class="comm-filter" data-filter="art">Art Styles</button>
+        <button class="comm-filter" data-filter="career">Career</button>
+      </div>
+    </div>
+
+    <!-- Groups Grid -->
+    <div class="comm-grid" id="comm-grid"></div>
+
+  </div>
+</section>
+
+<!-- Chat Modal -->
+<div class="chat-overlay" id="chat-overlay">
+  <div class="chat-modal">
+    <div class="chat-header">
+      <div class="chat-header-info">
+        <span class="chat-group-icon" id="chat-icon"></span>
+        <div>
+          <div class="chat-group-name" id="chat-name"></div>
+          <div class="chat-group-members" id="chat-members"></div>
+        </div>
+      </div>
+      <button class="chat-close" id="chat-close">✕</button>
+    </div>
+    <div class="chat-messages" id="chat-messages"></div>
+    <div class="chat-input-row">
+      <input type="text" id="chat-input" placeholder="Type a message..." />
+      <button id="chat-send">Send ➤</button>
+    </div>
+  </div>
+</div>
+
+<footer class="footer" id="footer"></footer>
+
+<script src="js/components.js"></script>
+<script src="js/main.js"></script>
+<script src="js/community.js"></script>
+</body>
+</html>

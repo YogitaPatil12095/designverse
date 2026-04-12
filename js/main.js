@@ -32,7 +32,7 @@
         speed: randomBetween(0.002, 0.008),
         phase: Math.random() * Math.PI * 2,
         color: Math.random() > 0.85
-          ? (Math.random() > 0.5 ? '#a78bfa' : '#67e8f9')
+          ? (Math.random() > 0.5 ? '#FF6B7A' : '#16A085')
           : '#ffffff'
       });
     }
@@ -112,6 +112,28 @@
 
 // Razorpay config (replace with your test key from .env)
 var RAZORPAY_KEY = 'rzp_test_SSo7vWRfJAnUHn'; // From .env file
+
+// ================================
+// Theme Toggle (dark / light)
+// ================================
+(function() {
+  var saved = localStorage.getItem('dv_theme');
+  if (saved === 'light') document.body.classList.add('light-mode');
+
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('#theme-toggle');
+    if (!btn) return;
+    var isLight = document.body.classList.toggle('light-mode');
+    localStorage.setItem('dv_theme', isLight ? 'light' : 'dark');
+    btn.textContent = isLight ? '☀️' : '🌙';
+  });
+
+  // Sync icon after navbar renders
+  document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('theme-toggle');
+    if (btn) btn.textContent = document.body.classList.contains('light-mode') ? '☀️' : '🌙';
+  });
+})();
 
 // ================================
 // Button ripple effect
@@ -222,15 +244,16 @@ function toggleUserPanel() {
 function updateNavAuth() {
   var navActions = document.querySelector('.nav-actions');
   if (!navActions) return;
+  var isLight = document.body.classList.contains('light-mode');
+  var toggleBtn = '<button class="theme-toggle" id="theme-toggle" title="Toggle theme">' + (isLight ? '☀️' : '🌙') + '</button>';
   if (Auth.isLoggedIn()) {
     var user = Auth.getUser();
     var initials = user.name ? user.name.split(' ').map(function(n){return n[0];}).join('').toUpperCase().slice(0,2) : 'U';
-    navActions.innerHTML =
+    navActions.innerHTML = toggleBtn +
       '<div class="nav-notification" onclick="toggleNotifPanel()">&#128276;<span class="notif-badge"></span></div>' +
       '<div class="nav-avatar" onclick="toggleUserPanel()" title="' + user.name + '" style="cursor:pointer">' + initials + '</div>';
   } else {
-    // Not logged in — show person icon that goes to login
-    navActions.innerHTML =
+    navActions.innerHTML = toggleBtn +
       '<a href="auth.html" class="nav-person-icon" title="Login" style="width:36px;height:36px;border-radius:50%;background:var(--bg-card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:var(--transition);text-decoration:none" onmouseover="this.style.borderColor=\'var(--accent-primary)\'" onmouseout="this.style.borderColor=\'var(--border)\'">&#128100;</a>' +
       '<a href="auth.html" class="btn-nav-cta">Get Started</a>';
   }
