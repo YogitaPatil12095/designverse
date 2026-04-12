@@ -77,17 +77,19 @@
       <div class="sidebar-xp">&#9889; 1,240 XP &middot; Level 5</div>
     </div>
     <nav class="sidebar-nav">
-      <a class="active">&#127968; Overview</a>
+      <a class="active" onclick="showDash('overview',this)">&#127968; Overview</a>
       <a href="courses.html">&#128218; My Courses</a>
+      <a onclick="showDash('referral',this)">&#127381; Referrals & Rewards</a>
+      <a onclick="showDash('feedback',this)">&#128172; Submit Feedback</a>
+      <a onclick="showDash('complaint',this)">&#128226; Raise a Complaint</a>
       <a href="#">&#127942; Certificates</a>
-      <a href="#">&#128197; Schedule</a>
-      <a href="#">&#10084; Wishlist</a>
-      <a href="#">&#128172; Community</a>
-      <a href="#">&#9881; Settings</a>
+      <a href="community.html">&#128101; Community</a>
       <a onclick="Auth.logout()" style="margin-top:1rem;color:#ef4444">&#128682; Logout</a>
     </nav>
   </aside>
   <main class="dash-main">
+    <!-- OVERVIEW PANEL -->
+    <div id="panel-overview">
     <div class="dash-greeting">
       <h1 id="dash-greeting-text">Welcome back &#128075;</h1>
       <p>Here's what's happening with your learning today.</p>
@@ -106,31 +108,158 @@
     <div class="achievements-row" id="achievements-row"></div>
     <div class="dash-section-title">Upcoming Workshops</div>
     <div class="upcoming-list" id="upcoming-list"></div>
+    </div>
 
-    <div class="dash-section-title">My Referral Code</div>
-    <div id="referral-section" style="background:linear-gradient(135deg,#1a0a2e,#0a0a1f);border:1px solid var(--border);border-radius:var(--radius-xl);padding:1.75rem;margin-bottom:2.5rem">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.25rem">
-        <div>
-          <div style="font-size:.82rem;color:var(--text-muted);margin-bottom:.35rem">Your unique referral link</div>
-          <div id="ref-link" style="font-size:.95rem;font-weight:700;color:var(--accent-secondary)">designverse.com/ref/DS2025</div>
-        </div>
-        <button onclick="copyRef()" style="padding:.5rem 1.25rem;background:var(--gradient-primary);border:none;border-radius:var(--radius-md);color:#fff;font-weight:600;font-size:.85rem;cursor:pointer">&#128203; Copy Link</button>
+    <!-- REFERRAL PANEL -->
+    <div id="panel-referral" style="display:none">
+      <div class="dash-greeting">
+        <h1>&#127381; Referrals &amp; Rewards</h1>
+        <p>Share your code, earn &#8377;200 for every friend who joins.</p>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem">
-        <div style="background:rgba(124,58,237,.1);border-radius:var(--radius-md);padding:1rem;text-align:center"><div style="font-size:1.5rem;font-weight:800;color:var(--accent-secondary)">24</div><div style="font-size:.75rem;color:var(--text-muted)">Total Referrals</div></div>
-        <div style="background:rgba(16,185,129,.1);border-radius:var(--radius-md);padding:1rem;text-align:center"><div style="font-size:1.5rem;font-weight:800;color:#10b981">&#8377;4,800</div><div style="font-size:.75rem;color:var(--text-muted)">Earned</div></div>
-        <div style="background:rgba(245,158,11,.1);border-radius:var(--radius-md);padding:1rem;text-align:center"><div style="font-size:1.5rem;font-weight:800;color:var(--accent-gold)">18</div><div style="font-size:.75rem;color:var(--text-muted)">Converted</div></div>
+      <div style="background:var(--gradient-primary);border-radius:var(--radius-xl);padding:2rem;margin-bottom:1.5rem;position:relative;overflow:hidden">
+        <div style="position:absolute;right:-20px;top:-20px;width:150px;height:150px;background:rgba(255,255,255,0.05);border-radius:50%"></div>
+        <div style="font-size:.82rem;color:rgba(255,255,255,.7);margin-bottom:.5rem">Your unique referral code</div>
+        <div id="ref-code-display" style="font-size:2rem;font-weight:800;color:#fff;letter-spacing:.1em;margin-bottom:1rem">DS2025</div>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+          <button onclick="copyRefCode()" style="padding:.5rem 1.25rem;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);border-radius:var(--radius-md);color:#fff;font-weight:600;font-size:.85rem;cursor:pointer;font-family:var(--font-body)">&#128203; Copy Code</button>
+          <button onclick="copyRefLink()" style="padding:.5rem 1.25rem;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);border-radius:var(--radius-md);color:#fff;font-weight:600;font-size:.85rem;cursor:pointer;font-family:var(--font-body)">&#128279; Copy Link</button>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem">
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;text-align:center">
+          <div style="font-size:2rem;font-weight:800;color:var(--accent-secondary)" id="ref-total">0</div>
+          <div style="font-size:.78rem;color:var(--text-muted);margin-top:.25rem">Total Referrals</div>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;text-align:center">
+          <div style="font-size:2rem;font-weight:800;color:#10b981" id="ref-earned">&#8377;0</div>
+          <div style="font-size:.78rem;color:var(--text-muted);margin-top:.25rem">Total Earned</div>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;text-align:center">
+          <div style="font-size:2rem;font-weight:800;color:var(--accent-gold)" id="ref-converted">0</div>
+          <div style="font-size:.78rem;color:var(--text-muted);margin-top:.25rem">Converted</div>
+        </div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden">
+        <div style="padding:1rem 1.25rem;border-bottom:1px solid var(--border);font-weight:700;font-size:.9rem">Referral History</div>
+        <div id="ref-history-list" style="padding:1rem 1.25rem"></div>
+      </div>
+      <!-- Simulate a referral for demo -->
+      <div style="margin-top:1.25rem;background:rgba(233,69,96,0.08);border:1px solid rgba(233,69,96,0.2);border-radius:var(--radius-md);padding:1rem 1.25rem">
+        <div style="font-size:.82rem;color:var(--text-muted);margin-bottom:.75rem">&#127381; Simulate a referral (demo)</div>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:center">
+          <input id="sim-ref-name" type="text" placeholder="Friend's name" style="padding:.5rem .85rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:var(--font-body);font-size:.85rem;flex:1;min-width:160px"/>
+          <select id="sim-ref-plan" style="padding:.5rem .85rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:var(--font-body);font-size:.85rem">
+            <option value="free">Free</option>
+            <option value="pro">Pro</option>
+          </select>
+          <button onclick="simulateReferral()" class="btn btn-primary btn-sm">Add Referral</button>
+        </div>
       </div>
     </div>
 
-    <div class="dash-section-title">My Feedback Journey</div>
-    <div id="feedback-journey" style="margin-bottom:2.5rem"></div>
+    <!-- FEEDBACK PANEL -->
+    <div id="panel-feedback" style="display:none">
+      <div class="dash-greeting">
+        <h1>&#128172; Submit Feedback</h1>
+        <p>Your feedback shapes the platform. Every submission is tracked and acted on.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);padding:1.75rem">
+          <h3 style="font-size:1rem;font-weight:700;margin-bottom:1.25rem">&#128221; New Feedback</h3>
+          <div style="display:flex;flex-direction:column;gap:1rem">
+            <div>
+              <label style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.35rem">Category</label>
+              <select id="fb-category" style="width:100%;padding:.6rem .9rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:var(--font-body);font-size:.875rem">
+                <option>Course Content</option>
+                <option>Platform / UI</option>
+                <option>Instructor</option>
+                <option>Payment</option>
+                <option>Feature Request</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.35rem">Your Feedback</label>
+              <textarea id="fb-text" rows="4" placeholder="Tell us what you think, what's working, or what could be better..." style="width:100%;padding:.6rem .9rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:var(--font-body);font-size:.875rem;resize:vertical"></textarea>
+            </div>
+            <div>
+              <label style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.5rem">Rating</label>
+              <div style="display:flex;gap:.5rem" id="fb-stars">
+                <span onclick="setRating(1)" style="font-size:1.5rem;cursor:pointer">&#9733;</span>
+                <span onclick="setRating(2)" style="font-size:1.5rem;cursor:pointer">&#9733;</span>
+                <span onclick="setRating(3)" style="font-size:1.5rem;cursor:pointer">&#9733;</span>
+                <span onclick="setRating(4)" style="font-size:1.5rem;cursor:pointer">&#9733;</span>
+                <span onclick="setRating(5)" style="font-size:1.5rem;cursor:pointer">&#9733;</span>
+              </div>
+            </div>
+            <button onclick="submitFeedback()" class="btn btn-primary">Submit Feedback</button>
+          </div>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);padding:1.75rem">
+          <h3 style="font-size:1rem;font-weight:700;margin-bottom:1.25rem">&#128202; My Feedback Journey</h3>
+          <div id="my-feedback-list"><p style="color:var(--text-muted);font-size:.85rem">No feedback submitted yet.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPLAINT PANEL -->
+    <div id="panel-complaint" style="display:none">
+      <div class="dash-greeting">
+        <h1>&#128226; Raise a Complaint</h1>
+        <p>We take every complaint seriously. Expect a response within 18 hours.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);padding:1.75rem">
+          <h3 style="font-size:1rem;font-weight:700;margin-bottom:1.25rem">&#128221; New Complaint</h3>
+          <div style="display:flex;flex-direction:column;gap:1rem">
+            <div>
+              <label style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.35rem">Complaint Type</label>
+              <select id="cmp-type" style="width:100%;padding:.6rem .9rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:var(--font-body);font-size:.875rem">
+                <option>Payment Issue</option>
+                <option>Course Access Problem</option>
+                <option>Certificate Not Received</option>
+                <option>Instructor Behaviour</option>
+                <option>Technical Bug</option>
+                <option>Refund Request</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.35rem">Subject</label>
+              <input id="cmp-subject" type="text" placeholder="Brief subject of your complaint" style="width:100%;padding:.6rem .9rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:var(--font-body);font-size:.875rem"/>
+            </div>
+            <div>
+              <label style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.35rem">Description</label>
+              <textarea id="cmp-desc" rows="4" placeholder="Describe your issue in detail..." style="width:100%;padding:.6rem .9rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:var(--font-body);font-size:.875rem;resize:vertical"></textarea>
+            </div>
+            <div>
+              <label style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.35rem">Priority</label>
+              <div style="display:flex;gap:.5rem">
+                <button onclick="setPriority('low',this)" class="priority-btn active" data-p="low" style="flex:1;padding:.45rem;border-radius:var(--radius-sm);border:1px solid #10b981;background:rgba(16,185,129,.1);color:#10b981;cursor:pointer;font-family:var(--font-body);font-size:.8rem">Low</button>
+                <button onclick="setPriority('medium',this)" class="priority-btn" data-p="medium" style="flex:1;padding:.45rem;border-radius:var(--radius-sm);border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;font-family:var(--font-body);font-size:.8rem">Medium</button>
+                <button onclick="setPriority('high',this)" class="priority-btn" data-p="high" style="flex:1;padding:.45rem;border-radius:var(--radius-sm);border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;font-family:var(--font-body);font-size:.8rem">High</button>
+              </div>
+            </div>
+            <button onclick="submitComplaint()" class="btn btn-primary">Submit Complaint</button>
+          </div>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);padding:1.75rem">
+          <h3 style="font-size:1rem;font-weight:700;margin-bottom:1.25rem">&#128203; My Complaints</h3>
+          <div id="my-complaints-list"><p style="color:var(--text-muted);font-size:.85rem">No complaints raised yet.</p></div>
+        </div>
+      </div>
+    </div>
+
   </main>
 </div>
 <footer class="footer" id="footer"></footer>
 <script src="js/components.js"></script>
 <script src="js/main.js"></script>
+<script src="js/ads.js"></script>
 <script>
+var currentRating = 0;
+var currentPriority = 'low';
+
 document.addEventListener('DOMContentLoaded', function() {
   if (!Auth.isLoggedIn()) { window.location.href = 'auth.html'; return; }
   var user = Auth.getUser();
@@ -139,8 +268,218 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('sidebar-initials').textContent = initials;
     document.getElementById('sidebar-name').textContent = user.name || 'Learner';
     document.getElementById('sidebar-email').textContent = user.email || '';
-    document.getElementById('dash-greeting-text').textContent = 'Welcome back, ' + (user.name ? user.name.split(' ')[0] : 'Learner') + ' &#128075;';
+    document.getElementById('dash-greeting-text').innerHTML = 'Welcome back, ' + (user.name ? user.name.split(' ')[0] : 'Learner') + ' &#128075;';
+
+    // Generate referral code from name
+    var code = (user.name || 'USER').replace(/\s+/g,'').toUpperCase().slice(0,4) + new Date().getFullYear();
+    document.getElementById('ref-code-display').textContent = code;
+    localStorage.setItem('dv_ref_code', code);
   }
+
+  // Enrolled courses
+  var COURSES = [
+    { id:1, title:'UI/UX Design Fundamentals', instructor:'Priya Sharma', emoji:'&#127912;', bg:'rgba(233,69,96,0.2)', progress:68 },
+    { id:3, title:'Graphic Design Bootcamp', instructor:'Sneha Patel', emoji:'&#128444;', bg:'rgba(255,107,122,0.2)', progress:42 },
+    { id:8, title:'Color Theory Masterclass', instructor:'Vikram Joshi', emoji:'&#127752;', bg:'rgba(22,160,133,0.2)', progress:91 },
+    { id:4, title:'Design Patterns & Systems', instructor:'Rahul Verma', emoji:'&#128311;', bg:'rgba(245,158,11,0.2)', progress:15 },
+  ];
+  document.getElementById('enrolled-grid').innerHTML = COURSES.map(function(c) {
+    return '<div class="enrolled-card" onclick="window.location.href=\'course-detail.html?id='+c.id+'\'">' +
+      '<div class="enrolled-thumb" style="background:'+c.bg+'">'+c.emoji+'</div>' +
+      '<div class="enrolled-info">' +
+        '<div class="enrolled-title">'+c.title+'</div>' +
+        '<div class="enrolled-instructor">&#128100; '+c.instructor+'</div>' +
+        '<div class="enrolled-progress-label"><span>Progress</span><span>'+c.progress+'%</span></div>' +
+        '<div class="progress-bar"><div class="progress-fill" style="width:'+c.progress+'%"></div></div>' +
+        '<button class="enrolled-continue" onclick="event.stopPropagation();showToast(\'Resuming...\',\'info\')">'+(c.progress===100?'&#128257; Review':'&#9654; Continue')+'</button>' +
+      '</div></div>';
+  }).join('');
+
+  // Activity
+  var ACT = [
+    {icon:'&#9989;',bg:'rgba(16,185,129,0.15)',text:'Completed lesson <strong>"Spacing & Layout Grids"</strong>',time:'2 hours ago'},
+    {icon:'&#127942;',bg:'rgba(245,158,11,0.15)',text:'Earned certificate: <strong>Color Theory Masterclass</strong>',time:'Yesterday'},
+    {icon:'&#128221;',bg:'rgba(233,69,96,0.15)',text:'Submitted project: <strong>Brand Moodboard</strong>',time:'2 days ago'},
+    {icon:'&#128293;',bg:'rgba(245,158,11,0.15)',text:'Reached a <strong>10-day learning streak</strong>',time:'6 days ago'},
+  ];
+  document.getElementById('activity-log').innerHTML = ACT.map(function(a){
+    return '<div class="activity-item"><div class="activity-icon" style="background:'+a.bg+'">'+a.icon+'</div><div class="activity-body"><div class="activity-text">'+a.text+'</div><div class="activity-time">'+a.time+'</div></div></div>';
+  }).join('');
+
+  // Achievements
+  var ACH = [
+    {icon:'&#128640;',name:'First Lesson',u:true},{icon:'&#128293;',name:'7-Day Streak',u:true},
+    {icon:'&#127942;',name:'Certified',u:true},{icon:'&#128175;',name:'Perfect Quiz',u:true},
+    {icon:'&#128218;',name:'5 Courses',u:false},{icon:'&#11088;',name:'Top Reviewer',u:false},
+  ];
+  document.getElementById('achievements-row').innerHTML = ACH.map(function(a){
+    return '<div class="achievement-badge '+(a.u?'':'locked')+'"><div class="achievement-icon">'+a.icon+'</div><div class="achievement-name">'+a.name+'</div></div>';
+  }).join('');
+
+  // Upcoming
+  var UPC = [
+    {day:'05',month:'Apr',title:'Live Workshop: Figma Auto Layout Deep Dive',meta:'3:00 PM IST · Priya Sharma'},
+    {day:'09',month:'Apr',title:'Webinar: Building a Design Portfolio in 2025',meta:'6:00 PM IST · Arjun Mehta'},
+  ];
+  document.getElementById('upcoming-list').innerHTML = UPC.map(function(u){
+    return '<div class="upcoming-item"><div class="upcoming-date"><div class="day">'+u.day+'</div><div class="month">'+u.month+'</div></div><div class="upcoming-info"><div class="upcoming-title">'+u.title+'</div><div class="upcoming-meta">'+u.meta+'</div></div><button onclick="showToast(\'Registered!\',\'success\')" style="padding:.45rem 1rem;background:rgba(233,69,96,.15);border:1px solid rgba(233,69,96,.3);border-radius:var(--radius-sm);color:var(--accent-secondary);font-size:.8rem;font-weight:600;cursor:pointer;white-space:nowrap">Register</button></div>';
+  }).join('');
+
+  renderReferrals();
+  renderMyFeedback();
+  renderMyComplaints();
+});
+
+// Panel switching
+function showDash(panel, el) {
+  ['overview','referral','feedback','complaint'].forEach(function(p) {
+    document.getElementById('panel-'+p).style.display = p===panel ? 'block' : 'none';
+  });
+  document.querySelectorAll('.sidebar-nav a').forEach(function(a){ a.classList.remove('active'); });
+  if (el) el.classList.add('active');
+}
+
+// ---- REFERRAL ----
+function copyRefCode() {
+  var code = document.getElementById('ref-code-display').textContent;
+  navigator.clipboard.writeText(code);
+  showToast('Referral code copied!', 'success');
+}
+function copyRefLink() {
+  var code = document.getElementById('ref-code-display').textContent;
+  navigator.clipboard.writeText('https://designverse.com/ref/' + code);
+  showToast('Referral link copied!', 'success');
+}
+function simulateReferral() {
+  var name = document.getElementById('sim-ref-name').value.trim();
+  var plan = document.getElementById('sim-ref-plan').value;
+  if (!name) { showToast('Enter a friend\'s name', 'error'); return; }
+  var refs = JSON.parse(localStorage.getItem('dv_my_referrals') || '[]');
+  var reward = plan === 'pro' ? 200 : 0;
+  refs.push({ name: name, plan: plan, reward: reward, date: new Date().toLocaleDateString('en-IN'), converted: plan === 'pro' });
+  localStorage.setItem('dv_my_referrals', JSON.stringify(refs));
+  document.getElementById('sim-ref-name').value = '';
+  renderReferrals();
+  showToast(name + ' added as referral' + (reward ? ' · ₹'+reward+' earned!' : ''), 'success');
+}
+function renderReferrals() {
+  var refs = JSON.parse(localStorage.getItem('dv_my_referrals') || '[]');
+  var total = refs.length;
+  var earned = refs.reduce(function(s,r){return s+r.reward;}, 0);
+  var converted = refs.filter(function(r){return r.converted;}).length;
+  document.getElementById('ref-total').textContent = total;
+  document.getElementById('ref-earned').textContent = '₹' + earned.toLocaleString();
+  document.getElementById('ref-converted').textContent = converted;
+  var list = document.getElementById('ref-history-list');
+  if (!refs.length) { list.innerHTML = '<p style="color:var(--text-muted);font-size:.85rem">No referrals yet. Share your code to start earning!</p>'; return; }
+  list.innerHTML = refs.map(function(r, i) {
+    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:.75rem 0;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:.5rem">' +
+      '<div><div style="font-size:.875rem;font-weight:600">' + r.name + '</div><div style="font-size:.75rem;color:var(--text-muted)">' + r.date + ' · ' + r.plan + ' plan</div></div>' +
+      '<div style="display:flex;align-items:center;gap:.75rem">' +
+        (r.converted ? '<span style="background:rgba(16,185,129,.15);color:#10b981;padding:.2rem .6rem;border-radius:100px;font-size:.72rem;font-weight:700">Converted</span>' : '<span style="background:rgba(100,116,139,.15);color:var(--text-muted);padding:.2rem .6rem;border-radius:100px;font-size:.72rem;font-weight:700">Pending</span>') +
+        (r.reward ? '<span style="color:#10b981;font-weight:700;font-size:.875rem">+₹'+r.reward+'</span>' : '<span style="color:var(--text-muted);font-size:.875rem">₹0</span>') +
+      '</div></div>';
+  }).join('');
+}
+
+// ---- FEEDBACK ----
+function setRating(n) {
+  currentRating = n;
+  var stars = document.querySelectorAll('#fb-stars span');
+  stars.forEach(function(s, i) {
+    s.style.color = i < n ? '#f59e0b' : 'var(--text-muted)';
+  });
+}
+function submitFeedback() {
+  var text = document.getElementById('fb-text').value.trim();
+  var category = document.getElementById('fb-category').value;
+  if (!text) { showToast('Please write your feedback', 'error'); return; }
+  var user = Auth.getUser();
+  var feedbacks = JSON.parse(localStorage.getItem('dv_user_feedback') || '[]');
+  var id = 'FB-' + Date.now();
+  feedbacks.push({
+    id: id, user: user ? user.name : 'Student', email: user ? user.email : '',
+    category: category, text: text, rating: currentRating,
+    date: new Date().toLocaleDateString('en-IN'), status: 'submitted'
+  });
+  localStorage.setItem('dv_user_feedback', JSON.stringify(feedbacks));
+  document.getElementById('fb-text').value = '';
+  setRating(0);
+  renderMyFeedback();
+  showToast('Feedback submitted! Thank you &#128172;', 'success');
+}
+function renderMyFeedback() {
+  var feedbacks = JSON.parse(localStorage.getItem('dv_user_feedback') || '[]');
+  var list = document.getElementById('my-feedback-list');
+  if (!feedbacks.length) { list.innerHTML = '<p style="color:var(--text-muted);font-size:.85rem">No feedback submitted yet.</p>'; return; }
+  var statusColors = { submitted: '#f59e0b', analysed: '#06b6d4', 'in-progress': '#a855f7', shipped: '#10b981' };
+  list.innerHTML = feedbacks.slice().reverse().map(function(f) {
+    var color = statusColors[f.status] || '#f59e0b';
+    return '<div style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-md);padding:1rem;margin-bottom:.75rem">' +
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem;margin-bottom:.5rem">' +
+        '<div style="font-size:.82rem;font-weight:600">' + f.category + '</div>' +
+        '<span style="background:'+color+'22;color:'+color+';padding:.15rem .55rem;border-radius:100px;font-size:.7rem;font-weight:700;white-space:nowrap">' + f.status + '</span>' +
+      '</div>' +
+      '<div style="font-size:.82rem;color:var(--text-secondary);margin-bottom:.4rem">' + f.text + '</div>' +
+      '<div style="font-size:.72rem;color:var(--text-muted)">' + f.id + ' · ' + f.date + (f.rating ? ' · ' + '★'.repeat(f.rating) : '') + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+// ---- COMPLAINT ----
+function setPriority(p, btn) {
+  currentPriority = p;
+  var colors = { low: '#10b981', medium: '#f59e0b', high: '#ef4444' };
+  document.querySelectorAll('.priority-btn').forEach(function(b) {
+    var bp = b.dataset.p;
+    b.style.background = bp === p ? colors[bp]+'22' : 'transparent';
+    b.style.borderColor = bp === p ? colors[bp] : 'var(--border)';
+    b.style.color = bp === p ? colors[bp] : 'var(--text-muted)';
+  });
+}
+function submitComplaint() {
+  var subject = document.getElementById('cmp-subject').value.trim();
+  var desc = document.getElementById('cmp-desc').value.trim();
+  var type = document.getElementById('cmp-type').value;
+  if (!subject || !desc) { showToast('Please fill in all fields', 'error'); return; }
+  var user = Auth.getUser();
+  var complaints = JSON.parse(localStorage.getItem('dv_user_complaints') || '[]');
+  var id = 'CMP-2025-' + String(complaints.length + 1001);
+  complaints.push({
+    id: id, user: user ? user.name : 'Student', email: user ? user.email : '',
+    type: type, subject: subject, desc: desc, priority: currentPriority,
+    date: new Date().toLocaleDateString('en-IN'), status: 'open'
+  });
+  localStorage.setItem('dv_user_complaints', JSON.stringify(complaints));
+  document.getElementById('cmp-subject').value = '';
+  document.getElementById('cmp-desc').value = '';
+  renderMyComplaints();
+  showToast('Complaint ' + id + ' raised! We\'ll respond within 18 hours.', 'success');
+}
+function renderMyComplaints() {
+  var complaints = JSON.parse(localStorage.getItem('dv_user_complaints') || '[]');
+  var list = document.getElementById('my-complaints-list');
+  if (!complaints.length) { list.innerHTML = '<p style="color:var(--text-muted);font-size:.85rem">No complaints raised yet.</p>'; return; }
+  var statusColors = { open: '#f59e0b', 'in-progress': '#06b6d4', resolved: '#10b981', closed: 'var(--text-muted)' };
+  var priorityColors = { low: '#10b981', medium: '#f59e0b', high: '#ef4444' };
+  list.innerHTML = complaints.slice().reverse().map(function(c) {
+    var sc = statusColors[c.status] || '#f59e0b';
+    var pc = priorityColors[c.priority] || '#f59e0b';
+    return '<div style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-md);padding:1rem;margin-bottom:.75rem">' +
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem;margin-bottom:.4rem">' +
+        '<div style="font-size:.82rem;font-weight:700">' + c.id + '</div>' +
+        '<div style="display:flex;gap:.4rem">' +
+          '<span style="background:'+pc+'22;color:'+pc+';padding:.15rem .5rem;border-radius:100px;font-size:.68rem;font-weight:700">' + c.priority + '</span>' +
+          '<span style="background:'+sc+'22;color:'+sc+';padding:.15rem .5rem;border-radius:100px;font-size:.68rem;font-weight:700">' + c.status + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div style="font-size:.85rem;font-weight:600;margin-bottom:.25rem">' + c.subject + '</div>' +
+      '<div style="font-size:.78rem;color:var(--text-secondary);margin-bottom:.35rem">' + c.desc.slice(0,80) + (c.desc.length>80?'…':'') + '</div>' +
+      '<div style="font-size:.72rem;color:var(--text-muted)">' + c.type + ' · ' + c.date + '</div>' +
+    '</div>';
+  }).join('');
+}
+</script>
   var COURSES = [
     { id:1, title:'UI/UX Design Fundamentals', instructor:'Priya Sharma', emoji:'&#127912;', bg:'rgba(124,58,237,0.2)', progress:68 },
     { id:3, title:'Graphic Design Bootcamp', instructor:'Sneha Patel', emoji:'&#128444;', bg:'rgba(236,72,153,0.2)', progress:42 },
@@ -173,23 +512,6 @@ document.addEventListener('DOMContentLoaded', function() {
   ];
   document.getElementById('activity-log').innerHTML = ACT.map(function(a){
     return '<div class="activity-item"><div class="activity-icon" style="background:'+a.bg+'">'+a.icon+'</div><div class="activity-body"><div class="activity-text">'+a.text+'</div><div class="activity-time">&#128336; '+a.time+'</div></div></div>';
-  }).join('');
-  var ACH = [
-    {icon:'&#128640;',name:'First Lesson',u:true},{icon:'&#128293;',name:'7-Day Streak',u:true},
-    {icon:'&#127942;',name:'Certified',u:true},{icon:'&#128175;',name:'Perfect Quiz',u:true},
-    {icon:'&#128218;',name:'5 Courses',u:false},{icon:'&#11088;',name:'Top Reviewer',u:false},
-    {icon:'&#127891;',name:'Graduate',u:false},{icon:'&#128081;',name:'Pro Designer',u:false},
-  ];
-  document.getElementById('achievements-row').innerHTML = ACH.map(function(a){
-    return '<div class="achievement-badge '+(a.u?'':'locked')+'" title="'+(a.u?'Unlocked':'Locked')+'"><div class="achievement-icon">'+a.icon+'</div><div class="achievement-name">'+a.name+'</div></div>';
-  }).join('');
-  var UPC = [
-    {day:'05',month:'Apr',title:'Live Workshop: Figma Auto Layout Deep Dive',meta:'3:00 PM IST &middot; Priya Sharma &middot; 120 seats left'},
-    {day:'09',month:'Apr',title:'Webinar: Building a Design Portfolio in 2025',meta:'6:00 PM IST &middot; Arjun Mehta &middot; 80 seats left'},
-    {day:'14',month:'Apr',title:'Masterclass: Brutalism & Bold Typography',meta:'4:30 PM IST &middot; Kavya Nair &middot; 200 seats left'},
-  ];
-  document.getElementById('upcoming-list').innerHTML = UPC.map(function(u){
-    return '<div class="upcoming-item"><div class="upcoming-date"><div class="day">'+u.day+'</div><div class="month">'+u.month+'</div></div><div class="upcoming-info"><div class="upcoming-title">'+u.title+'</div><div class="upcoming-meta">'+u.meta+'</div></div><button onclick="showToast(\'Registered!\',\'success\')" style="padding:0.45rem 1rem;background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3);border-radius:var(--radius-sm);color:var(--accent-secondary);font-size:0.8rem;font-weight:600;cursor:pointer;white-space:nowrap">Register</button></div>';
   }).join('');
 });
 </script>
